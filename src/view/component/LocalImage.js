@@ -27,6 +27,7 @@ export class LocalImage extends Component {
                         imageStyle,
                     ]}
                     source={require(uri)}
+                    defaultSource={{}}
                 />
             </View>
         );
