@@ -10,46 +10,51 @@ import Color from '../../../../styles/Color';
 export default StyleSheet.create({
     container: {
         flex: 1,
-        borderWidth: 1,
+        //borderWidth: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: Color.Green,
     },
     header_1: {
         flex: 1,
-        borderWidth: 1,
+        //borderWidth: 1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
     },
     header_2: {
         flex: 1,
-        borderWidth: 1,
+        //borderWidth: 1,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
     },
+    left: {
+        marginLeft: 5,
+    },
+    right: {
+        marginRight: 5,
+    },
     title: {
         flex: 1,
-        borderWidth: 1,
+        //borderWidth: 1,
         textAlign: 'center',
-        fontSize: FontSize.intermediate,
+        fontSize: FontSize.Huge,
+        color: Color.White,
     },
     month: {
         flex: 1,
-        borderWidth: 1,
+        //borderWidth: 1,
         textAlign: 'center',
-        fontSize: FontSize.intermediate,
+        fontSize: FontSize.Large,
+        fontWeight: 'bold',
+        color: Color.White,
     },
     remainder: {
         flex: 1,
-        borderWidth: 1,
+        //borderWidth: 1,
         textAlign: 'center',
-        fontSize: FontSize.intermediate,
+        fontSize: FontSize.small,
+        color: Color.White,
     },
 })
-
-const style ={
-    ...{style1,}
-
-}

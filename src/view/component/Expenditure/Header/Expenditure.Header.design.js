@@ -8,8 +8,8 @@ import styles from './Expenditure.Header.style'
 import Icon, { Size } from '../../../../styles/Icon';
 
 const defaultProps = {
-    left: Icon.User(Size.intermediate),
-    right: Icon.User(Size.intermediate),
+    left: Icon.Left(Size.intermediate),
+    right: Icon.Right(Size.intermediate),
     month: 'Tháng ...',
     remainder: 'Chưa có hạn mức chi',
     constant: {
@@ -28,10 +28,18 @@ const List_V1 = {
     ],
     date: new Date(2019,3,3),
     [Name.renderLeftComponent]: ()=> {
-        return defaultProps.left;
+        return (
+            <View style={styles.left}>
+                {defaultProps.left}
+            </View>
+            );
     },
     [Name.renderRightComponent]: ()=> {
-        return defaultProps.right;
+        return (
+            <View style={styles.right}>
+               {defaultProps.right}
+            </View>
+            );
     },
     [Name.renderMidComponent]: ({
         month= defaultProps.month,

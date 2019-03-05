@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import Color from './Color';
  
 const StandardSize = {
     smallest: 10,
@@ -18,17 +19,26 @@ const NameList = {
     default: 'areachart',
     user: 'user-circle-o',
     filter: 'filter',
-    left: 'left',
-    right: 'right',
+    left: 'caretleft',
+    right: 'caretright',
 }
 
 export default {
-    User: (size = Size.intermediate) => 
-        <FontAwesome name={NameList.user} size={size}/>,
-    Left: (size = Size.intermediate) => 
-        <FontAwesome name={NameList.user} size={size}/>,
-    Right: (size = Size.intermediate) => 
-        <FontAwesome name={NameList.user} size={size}/>,
+    User: (
+        size = Size.intermediate,
+        color = Color.White,
+        ) => 
+        <FontAwesome name={NameList.user} size={size} color={color}/>,
+    Left: (
+        size = Size.intermediate,
+        color = Color.White,
+        ) => 
+        <AntDesign name={NameList.left} size={size} color={color}/>,
+    Right: (
+        size = Size.intermediate,
+        color = Color.White,
+        ) => 
+        <AntDesign name={NameList.right} size={size} color={color}/>,
 }
 
 export {

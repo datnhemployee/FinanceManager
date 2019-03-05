@@ -87,7 +87,7 @@ const List_V1 = {
  * @tag `Changable`
  */
 const List = {
-    render: List_1[Name.render].bind(List_V1),
+    render: List_V1[Name.render].bind(List_V1),
     //  the next release version should be added here ...
     ...{
         
