@@ -7,7 +7,11 @@ import {
 import Header from '../../component/Expenditure/Header/Expenditure.Header'
 import Name from './Expenditure.design.interface';
 import styles from './Expenditure.style';
+import NavigationBar from '../../component/NavigationBar/NavigationBar';
 
+const props = {
+    expenditure: true,
+}
 /**
  * @description The `FunctionNameList` is used at present
  * @tag `Unchangable`
@@ -43,9 +47,13 @@ const List_V1 = {
     },
 
     [Name.renderFooter]: ({
+        
     }={}) => {
         return (
             <View style={styles.footer}>
+                <NavigationBar 
+                    expenditure={props.expenditure}
+                />
             </View>
         );
     },

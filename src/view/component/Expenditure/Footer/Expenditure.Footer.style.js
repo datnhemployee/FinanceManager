@@ -30,10 +30,10 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     left: {
-        marginLeft: 10,
+        marginLeft: 5,
     },
     right: {
-        marginRight: 10,
+        marginRight: 5,
     },
     title: {
         flex: 1,

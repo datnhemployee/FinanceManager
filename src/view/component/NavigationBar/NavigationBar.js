@@ -6,20 +6,28 @@ import {
     View,
     Text,
 } from 'react-native';
-import render from './Expenditure.Header.design'
+import render from './NavigationBar.design'
 
 export default class extends Component {
     constructor (props) {
         super(props);
     }
+
+
    
     render() {
         let {
-            title,
-            month,
-            remainder,
+            home,
+            total,
+            expenditure,
+            debt,
         } = this.props;
-        return render({title,month,remainder});
+        return render({
+            home,
+            total,
+            expenditure,
+            debt,
+        });
     }
 }
 

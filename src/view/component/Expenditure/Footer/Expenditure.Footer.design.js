@@ -3,13 +3,13 @@ import {
     View,
     Text,
 } from 'react-native';
-import Name from './Expenditure.Header.design.interface'
-import styles from './Expenditure.Header.style'
+import Name from './Expenditure.Footer.design.interface'
+import styles from './Expenditure.Footer.style'
 import Icon, { Size } from '../../../../styles/Icon';
 
-const props = {
-    left: Icon.Left(Size.small),
-    right: Icon.Right(Size.small),
+const defaultProps = {
+    left: Icon.Left(Size.intermediate),
+    right: Icon.Right(Size.intermediate),
     month: 'Tháng ...',
     remainder: 'Chưa có hạn mức chi',
     constant: {
@@ -30,20 +30,20 @@ const List_V1 = {
     [Name.renderLeftComponent]: ()=> {
         return (
             <View style={styles.left}>
-                {props.left}
+                {defaultProps.left}
             </View>
             );
     },
     [Name.renderRightComponent]: ()=> {
         return (
             <View style={styles.right}>
-               {props.right}
+               {defaultProps.right}
             </View>
             );
     },
     [Name.renderMidComponent]: ({
-        month= props.month,
-        remainder= props.remainder,
+        month= defaultProps.month,
+        remainder= defaultProps.remainder,
     }={})=> {
         return (
             <View style={styles.header_2}>
@@ -57,7 +57,7 @@ const List_V1 = {
         )
     },
     [Name.renderTitle]: (
-        title = props.constant.title,
+        title = defaultProps.constant.title,
     )=> {
         return (
             <Text style={styles.title}>
