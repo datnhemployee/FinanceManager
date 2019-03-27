@@ -37,9 +37,9 @@ const NameList = {
 }
 
 export default {
-    User: (
-        size = Size.intermediate,
-        color = Color.White,
+  Filter: (size = Size.intermediate, color = Color.White) => (
+    <FontAwesome name={NameList.filter} size={size} color={color} />
+  ),
         ) => 
         <FontAwesome name={NameList.user} size={size} color={color}/>,
     Left: (
