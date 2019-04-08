@@ -4,99 +4,141 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
+import Feather from 'react-native-vector-icons/Feather'
 import Entypo from 'react-native-vector-icons/Entypo'
 import Color from './Color';
  
 const StandardSize = {
     smallest: 10,
     small: 20,
-    intermediate: 30,
+    intermediate: 25,
     large: 40,
     huge: 50,
 }
 
 const Size = {
-    default: StandardSize.intermediate,
+    default: StandardSize.small,
     ...StandardSize,
 }
 const NameList = {
     default: 'areachart',
+
     user: 'user-circle-o',
+
     filter: 'filter',
-    left: 'caretleft',
+
+    left: 'chevron-left',
     right: 'caretright',
-    home_untapped: 'home-variant-outline',
-    home_tapped: 'home-variant',
+
+    home_untapped: 'home',
+    home_tapped: 'home',
+
     total_untapped: 'pie-chart-outlined',
     total_tapped: 'pie-chart',
+
     expenditure_untapped: 'wallet',
     expenditure_tapped: 'wallet',
+
     debt_untapped: 'creditcard',
     debt_tapped: 'money-check-alt',
+
     add: 'pluscircle',
+
+    notebook_tapped: 'notebook',
+    notebook_tapped: 'notebook',
+
+    note_tapped: 'clone',
+    note_untapped: 'clone',
+
+    picture: 'picture-o',
+
+    send: 'send-o',
 }
 
+const untapColor = Color.Navigation.untapped;
+
 export default {
-    User: (
-        size = Size.intermediate,
-        color = Color.White,
-        ) => 
+    User: ({
+        size = Size.default,
+        color = Color.Gray,
+        }={}) => 
         <FontAwesome name={NameList.user} size={size} color={color}/>,
-    Left: (
-        size = Size.intermediate,
-        color = Color.White,
-        ) => 
+    Left: ({
+        size = Size.default,
+        color = Color.Gray,
+        }={}) => 
         <AntDesign name={NameList.left} size={size} color={color}/>,
-    Right: (
-        size = Size.intermediate,
-        color = Color.White,
-        ) => 
+    Right: ({
+        size = Size.default,
+        color = Color.Gray,
+        }={}) => 
         <AntDesign name={NameList.right} size={size} color={color}/>,
-    HomeTapped: (
-        size = Size.intermediate,
+    // Home: ({
+    //     isTapped = false,
+    //     size = Size.default,
+    //     tapColor = Color.Black,
+    //     }={}) => isTapped ?
+    //         <AntDesign name={NameList.home_tapped} size={size} color={tapColor}/>
+    //         :<AntDesign name={NameList.home_untapped} size={size} color={untapColor}/>,
+    // Total: ({
+    //     isTapped = false,
+    //     size = Size.default,
+    //     tapColor = Color.Black,
+    //     }={}) => isTapped ?
+    //         <MaterialIcons name={NameList.total_tapped} size={size} color={tapColor}/>
+    //         :<MaterialIcons name={NameList.total_untapped} size={size} color={untapColor}/>,
+    // Expenditure: ({
+    //     isTapped = false,
+    //     size = Size.default,
+    //     tapColor = Color.Black,
+    //     }={}) => isTapped ?
+    //         <Entypo name={NameList.expenditure_tapped} size={size} color={tapColor}/>
+    //         :<AntDesign name={NameList.expenditure_untapped} size={size} color={untapColor}/>,
+    // Debt: ({
+    //     isTapped = false,
+    //     size = Size.default,
+    //     tapColor = Color.Black,
+    //     }={}) => isTapped ?
+    //     <FontAwesome5 name={NameList.debt_tapped} size={size} color={tapColor}/>
+    //     :<AntDesign name={NameList.debt_untapped} size={size} color={untapColor}/>,
+    // Add: ({
+    //     isTapped = false,
+    //     size = Size.default,
+    //     tapColor = Color.Black,
+    //     }={}) => isTapped ?
+    //     <AntDesign name={NameList.add} size={size} color={tapColor}/>
+    //     :<AntDesign name={NameList.add} size={size} color={untapColor}/>,
+    Note: ({
+        isTapped = false,
+        size = Size.default,
+        tapColor = Color.Black,
+        }={}) => isTapped ?
+            <FontAwesome name={NameList.note_tapped} size={size} color={tapColor}/>
+            :<FontAwesome name={NameList.note_untapped} size={size} color={untapColor}/>,
+    // Notebook: ({
+    //     isTapped = false,
+    //     size = Size.default,
+    //     tapColor = Color.Black,
+    //     }={}) => isTapped ?
+    //         <SimpleLineIcons name={NameList.notebook_tapped} size={size} color={tapColor}/>
+    //         :<SimpleLineIcons name={NameList.notebook_untapped} size={size} color={untapColor}/>,
+    Left: ({
+        size = Size.default,
         color = Color.Black,
-        ) => 
-        <MaterialCommunityIcons name={NameList.home_tapped} size={size} color={color}/>,
-    HomeUntapped: (
-        size = Size.intermediate,
-        color = Color.Gray,
-        ) => 
-        <MaterialCommunityIcons name={NameList.home_untapped} size={size} color={color}/>,
-    TotalTapped: (
-        size = Size.intermediate,
+        }={}) => 
+            <Entypo name={NameList.left} size={size} color={color}/>,
+    Picture: ({
+        size = Size.default,
         color = Color.Black,
-        ) => 
-        <MaterialIcons name={NameList.total_tapped} size={size} color={color}/>,
-    TotalUntapped: (
-        size = Size.intermediate,
-        color = Color.Gray,
-        ) => 
-        <MaterialIcons name={NameList.total_untapped} size={size} color={color}/>,
-    ExpenditureTapped: (
-        size = Size.intermediate,
+        }={}) => 
+            <FontAwesome name={NameList.picture} size={size} color={color}/>,
+    Send: ({
+        size = Size.default,
         color = Color.Black,
-        ) => 
-        <Entypo name={NameList.expenditure_tapped} size={size} color={color}/>,
-    ExpenditureUntapped: (
-        size = Size.intermediate,
-        color = Color.Gray,
-        ) => 
-        <AntDesign name={NameList.expenditure_untapped} size={size} color={color}/>,
-    DebtTapped: (
-        size = Size.intermediate,
-        color = Color.Black,
-        ) => 
-        <FontAwesome5 name={NameList.debt_tapped} size={size} color={color}/>,
-    DebtUntapped: (
-        size = Size.intermediate,
-        color = Color.Gray,
-        ) => 
-        <AntDesign name={NameList.debt_untapped} size={size} color={color}/>,
-    Add: (
-        size = Size.intermediate,
-        color = Color.Green,
-        ) => 
-        <AntDesign name={NameList.add} size={size} color={color}/>,
+        }={}) => 
+            <FontAwesome name={NameList.send} size={size} color={color}/>,        
+            
 }
 
 export {

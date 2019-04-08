@@ -2,15 +2,13 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View} from 'react-native';
 import SQLite from "react-native-sqlite-storage";
-import Expenditure from './src/view/screen/Expenditure/Expenditure';
+import Note from './src/view/screen/Note/Note';
 
 const url = 
   `https://facebook.github.io/react-native/docs/assets/favicon.png`;
 export default class App extends Component {
   constructor (props) {
     super(props);
-    console.log("running");
-
   }
   componentDidMount () {
     //SQLite.DEBUG(true);
@@ -27,8 +25,9 @@ export default class App extends Component {
 
   render() {
     return (
-      <View style={{flex: 1,flexDirection:'column'}}>
-        <Expenditure />
+      
+      <View style={{flex: 1}}>
+          <Note />
       </View>
     );
         
