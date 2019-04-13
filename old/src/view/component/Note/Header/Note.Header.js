@@ -14,13 +14,13 @@ export default class extends Component {
         this.state = {
         }
     }
-   
     render() {
         let {
             navigated = navigationIDs.default,
             navigationDetail_Click = this.navigationDetail_Click,
             navigationBill_Click = this.navigationBill_Click,
         } = this.props;
+        
         return main({
             navigated: navigated,
             navigationDetail_Click,

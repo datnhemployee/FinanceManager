@@ -1,4 +1,3 @@
-
 const Font = {
     Roboro: {
         Regular: 'Roboto',
@@ -97,8 +96,6 @@ Typeface.toCase = ({
         [Typeface.type.overline]: toUpperCase,
         [Typeface.type.button]: toUpperCase,
     }
-    console.log(text,type);
-    console.log(text,transform[type]);
     if(!transform[type])
         return text.slice();
     return transform[type]({text: result});

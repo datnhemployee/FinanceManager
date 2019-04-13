@@ -5,49 +5,98 @@ import {
     Picker,
     View,
     Text,
+    TouchableOpacity,
 } from 'react-native';
-import main from './Note.render'
-import { navigationIDs } from '../../component/Note/Header/Note.Header.render';
+import styles, { substyles } from './Note.style';
+import params from './Note.default';
+import NoteLine from '../../component/Note/Line/Note.Line';
 
 export default class extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            navigated: navigationIDs.default,
         }
-        this.navigationDetail_Click =  this.navigationDetail_Click.bind(this);
-        this.navigationBill_Click = this.navigationBill_Click.bind(this);
-        this.onPageSelected = this.onPageSelected.bind(this);
     }
-    navigationDetail_Click = () => {
-        let temp = navigationIDs.detail;
-        console.log("Bạn vừa chọm nè: "+ temp);
-        this.setState({navigated: temp})
-    }
-
-    navigationBill_Click = () => {
-        let temp = navigationIDs.bill;
-        console.log("Bạn vừa chọm nè: "+ temp);
-        this.setState({navigated: temp})
+    
+    dateLable () {
+        return (
+            <Text style={styles.dateLable}>
+                {params.dateText}
+            </Text>
+        );
     }
 
-    onPageSelected = (
-        e
-    )=> {
-        let temp = e.nativeEvent.position + 1; 
-        console.log("Bạn vừa chọm nè: "+ temp);
-        this.setState({navigated: temp})
+    imageButton () {
+        return (
+            <TouchableOpacity 
+                style={substyles.footer.imageButton}>
+                {params.imageIcon}
+            </TouchableOpacity>
+        );
+    }
+
+    notificationButton () {
+        return (
+            <TouchableOpacity style={substyles.footer.notifyButton}>
+                <Text style={substyles.footer.notifyText}>
+                    {params.notificationText}            
+                </Text>
+            </TouchableOpacity>
+        );
+    }
+
+    sendButton () {
+        return (
+            <TouchableOpacity 
+                style={substyles.footer.sendButton}>
+                {params.sendIcon}
+            </TouchableOpacity>
+        );
+    }
+
+    header () {
+        return (
+            <View style={styles.header}>
+                {this.dateLable()}            
+            </View>
+        );
+    }
+
+    body () {
+        let {
+            navigation,
+        } = this.props;
+        return (
+            <View style={styles.body}>
+                <NoteLine 
+                style={{flex: 1}}
+                navigation = {navigation}
+                />
+            </View>
+        );
+    }
+
+    footer () {
+        return (
+            <View style={styles.footer}>
+                {this.imageButton()}
+                {this.notificationButton()}
+                {this.sendButton()}
+            </View>
+        );
     }
 
     render() {
         let {
         } = this.props;
-        return main({
-            navigationDetail_Click: this.navigationDetail_Click,
-            navigationBill_Click: this.navigationBill_Click,
-            onPageSelected: this.onPageSelected,
-            navigated: this.state.navigated,
-        });
+
+        return (
+            <View style={styles.container}>
+                {this.header()}
+                {this.body()}
+                {this.footer()}
+            </View>
+        )
     }
 }
 

@@ -26,7 +26,7 @@ TradingOff[Render.Header] = ({
                 navigationBill_Click={navigationBill_Click}
             />
         </View>
-    )
+    );
 }
 
 TradingOff[Render.Body] = ({
@@ -56,15 +56,15 @@ export default ({
     onPageSelected,
 } = {}) => {
     return (
-        <View style={Styles.Container}>
-            {TradingOff[Render.Header]({
-                navigationDetail_Click,
-                navigationBill_Click,
-            })}          
-            {TradingOff[Render.Body]({
-                onPageSelected,
-            })}          
-            {TradingOff[Render.Footer]({})}          
-        </View>
-    );
+            <View style={Styles.Container}>
+                {TradingOff[Render.Header]({
+                    navigationDetail_Click,
+                    navigationBill_Click,
+                })}          
+                {TradingOff[Render.Body]({
+                    onPageSelected,
+                })}          
+                {TradingOff[Render.Footer]({})}          
+            </View>
+        );
 }

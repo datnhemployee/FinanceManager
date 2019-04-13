@@ -33,39 +33,39 @@ TradingOff[Render.NavigationButton] = ({
     navigateButton_Click = Props.navigateButton_Click,
 }={}) => {
         return (
-        <View style={Styles[Render.NavigationButton]}>
-            <TouchableOpacity 
-                style={[
-                    Substyles[Render.NavigationButton].button,
-                ]}
-                onPress = {()=>navigateButton_Click()}>
-                <Text style={[
-                        Substyles[Render.NavigationButton].text,
-                    ]}>
-                    {Typeface.toCase({
-                        text: firstReminder,
-                        type: Typeface.type.default,
-                    })}
-                </Text>
-                <Text style={[
-                        Substyles[Render.NavigationButton].number,
-                        numberOfReminder>0 ? 
-                            {
-                                color:Color.DarkGreen,
-                                backgroundColor:Color.DarkGreen,
-                            }
-                            :{
-                                color:Color.White,
-                                backgroundColor:Color.White,
-                            }
-                    ]}>
-                    {Typeface.toCase({
-                        text: `${numberOfReminder}`,
-                        type: Typeface.type.default,
-                    })}
-                </Text>
-            </TouchableOpacity>
-        </View>
+            <View style={Styles[Render.NavigationButton]}>
+                <TouchableOpacity 
+                    style={[
+                        Substyles[Render.NavigationButton].button,
+                    ]}
+                    onPress = {()=>navigateButton_Click()}>
+                    <Text style={[
+                            Substyles[Render.NavigationButton].text,
+                        ]}>
+                        {Typeface.toCase({
+                            text: firstReminder,
+                            type: Typeface.type.default,
+                        })}
+                    </Text>
+                    <Text style={[
+                            Substyles[Render.NavigationButton].number,
+                            numberOfReminder>0 ? 
+                                {
+                                    color:Color.DarkGreen,
+                                    backgroundColor:Color.DarkGreen,
+                                }
+                                :{
+                                    color:Color.White,
+                                    backgroundColor:Color.White,
+                                }
+                        ]}>
+                        {Typeface.toCase({
+                            text: `${numberOfReminder}`,
+                            type: Typeface.type.default,
+                        })}
+                    </Text>
+                </TouchableOpacity>
+            </View>
     )
 }
 

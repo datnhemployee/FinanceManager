@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View} from 'react-native';
 import SQLite from "react-native-sqlite-storage";
-import Note from './src/view/screen/Note/Note';
+import MainNavigation from './src/navigation/MainNavigation';
 
 const url = 
   `https://facebook.github.io/react-native/docs/assets/favicon.png`;
@@ -27,7 +27,7 @@ export default class App extends Component {
     return (
       
       <View style={{flex: 1}}>
-          <Note />
+        <MainNavigation />
       </View>
     );
         
