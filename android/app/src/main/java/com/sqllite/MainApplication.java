@@ -3,6 +3,7 @@ package com.sqllite;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.horcrux.svg.SvgPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
         new SQLitePluginPackage(),
         new MainReactPackage(),
+            new SvgPackage(),
             new RNGestureHandlerPackage(),
             new ImagePickerPackage(),
         new VectorIconsPackage()
