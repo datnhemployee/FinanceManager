@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, Modal } from 'react-native';
+import { Text, View, TouchableOpacity, Modal, Dimensions } from 'react-native';
 import styles from './DashboardStyle'
 import FAIcon from 'react-native-vector-icons/FontAwesome'
 import SLIcon from 'react-native-vector-icons/SimpleLineIcons'
@@ -64,9 +64,9 @@ export default class DashBoard extends Component {
                         textAnchor={'middle'}
                         alignmentBaseline={'middle'}
                         fontSize={20}
-                        stroke={'black'}
-                        strokeWidth={0.2}
-                    >
+                        // stroke={'black'}
+                        // strokeWidth={0.2}
+                        >
                         {data.amount}
                     </TextFromSVG>
                 )
@@ -77,21 +77,11 @@ export default class DashBoard extends Component {
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={styles.info_text_left}>Số dư</Text>
                     <Text style={styles.info_text_right}>3.000.000 đ</Text>
-                    <TouchableOpacity onPress={()=>{this.openAddMoney()}} style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#00CC00', justifyContent: 'center', alignItems: 'center', marginLeft: 5 }}>
-                        <FAIcon name='plus' size={13} color='#ffffff' />
-                    </TouchableOpacity>
+                    
                 </View>
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={styles.info_text_left}>Đã chi trong ngày</Text>
                     <Text style={styles.info_text_right}>50.000 đ</Text>
-                </View>
-                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', borderTopWidth: 1 }}>
-                    <TouchableOpacity style={{ marginLeft: 10, marginRight: 10 }}>
-                        <FAIcon name='calendar' size={25} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ marginLeft: 10, marginRight: 10 }}>
-                        <SLIcon name='note' size={25} />
-                    </TouchableOpacity>
                 </View>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', borderTopWidth: 1, borderBottomWidth: 1 }}>
                     <Text style={styles.title_text}>02/12/1997</Text>
@@ -99,9 +89,9 @@ export default class DashBoard extends Component {
                 <View style={{ flex: 1, justifyContent: 'center' }}>
                     <Text style={styles.title_text}>Chi tiêu</Text>
                 </View>
-                <View style={{ flex: 10 }}>
+                <View style={{ flex: 10}}>
                     <PieChart
-                        style={{ height: 350 }}
+                        style={{ height: 300, borderWidth: 1 }}
                         valueAccessor={({ item }) => item.amount}
                         data={data}
                         spacing={0}
@@ -120,6 +110,23 @@ export default class DashBoard extends Component {
                     closeAddMoney = {this.closeAddMoney}
                     />
                 </Modal>
+                <TouchableOpacity 
+                    onPress={()=>{this.openAddMoney()}} 
+                    style={{ 
+                        width: 20, 
+                        height: 20, 
+                        borderRadius: 10, 
+                        backgroundColor: '#00CC00', 
+                        justifyContent: 'center', 
+                        alignItems: 'center', 
+                        marginLeft: 5,
+                        bottom: 0,
+                        // left: 0,
+                        right: - Dimensions.get('screen').width + 40,
+                        // top: 0,
+                        }}>
+                    <FAIcon name='plus' size={13} color='#ffffff' />
+                </TouchableOpacity>
             </View>
         )
     }

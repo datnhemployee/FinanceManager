@@ -4,11 +4,15 @@ const Font = {
         Regular: 'Roboto',
         Medium: 'Roboto-Medium',
         Light: 'Roboto-Light',
+    },
+    UVF: {
+        Verner: 'UVF Verner',
     }
 }
 
 const Typeface = {
     overline: {
+        fontWeight: 'bold',
         fontSize: 10,
         letterSpacing: 1.5,
         fontFamily: Font.Roboro.Regular,
@@ -19,15 +23,17 @@ const Typeface = {
         fontFamily: Font.Roboro.Regular,
     },
     button: {
+        fontWeight: 'bold',
         fontSize: 14,
         letterSpacing: 1.25,
         fontFamily: Font.Roboro.Medium,
     },
     body: {
         1: {
-        fontSize: 16,
-        letterSpacing: 0.25,
-        fontFamily: Font.Roboro.Regular,
+            fontWeight: 'bold',
+            fontSize: 16,
+            letterSpacing: 0.25,
+            fontFamily: Font.Roboro.Regular,
         },
         2: {
             fontSize: 14,
@@ -37,11 +43,12 @@ const Typeface = {
     },
     subtitle: {
         1: {
-        fontSize: 16,
-        letterSpacing: 0.15,
-        fontFamily: Font.Roboro.Regular,
+            fontSize: 16,
+            letterSpacing: 0.15,
+            fontFamily: Font.Roboro.Regular,
         },
         2: {
+            fontWeight: 'bold',
             fontSize: 14,
             letterSpacing: 0.1,
             fontFamily: Font.Roboro.Medium,
@@ -49,9 +56,10 @@ const Typeface = {
     },
     header: {
         1: {
-        fontSize: 96,
-        letterSpacing: -1.5,
-        fontFamily: Font.Roboro.Light,
+            fontWeight: 'bold',
+            fontSize: 96,
+            letterSpacing: -1.5,
+            fontFamily: Font.Roboro.Light,
         },
         2: {
             fontSize: 60,
@@ -59,11 +67,13 @@ const Typeface = {
             fontFamily: Font.Roboro.Light,
         },
         3: {
+            fontWeight: 'bold',
             fontSize: 48,
             letterSpacing: 0,
             fontFamily: Font.Roboro.Regular,
-            },
+        },
         4: {
+            fontWeight: 'bold',
             fontSize: 34,
             letterSpacing: 0.25,
             fontFamily: Font.Roboro.Regular,
@@ -74,6 +84,7 @@ const Typeface = {
             fontFamily: Font.Roboro.Regular,
             },
         6: {
+            fontWeight: 'bold',
             fontSize: 20,
             letterSpacing: 0.15,
             fontFamily: Font.Roboro.Medium,
@@ -97,8 +108,6 @@ Typeface.toCase = ({
         [Typeface.type.overline]: toUpperCase,
         [Typeface.type.button]: toUpperCase,
     }
-    console.log(text,type);
-    console.log(text,transform[type]);
     if(!transform[type])
         return text.slice();
     return transform[type]({text: result});

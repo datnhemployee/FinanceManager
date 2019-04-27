@@ -5,7 +5,8 @@ const Default = {
     Blue: 'rgb(30, 144, 255)',
     Black: 'black',
     White: 'white',
-    Gray: '#757575',
+    Gray: '#e0e0e0',
+    LightGray: '#f5f5f5',
 }
 
 const Navigation = {

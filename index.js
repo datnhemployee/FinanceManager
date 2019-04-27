@@ -5,7 +5,7 @@
 
 import {AppRegistry} from 'react-native';
 import App from './App';
-import DashBoard from './Dashboard'
 import {name as appName} from './app.json';
+// import DashBoard from './Dashboard';
 
-AppRegistry.registerComponent(appName, () => DashBoard);
+AppRegistry.registerComponent(appName, () => App);

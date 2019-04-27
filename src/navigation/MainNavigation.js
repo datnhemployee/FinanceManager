@@ -1,14 +1,15 @@
-import { createMaterialTopTabNavigator, createAppContainer, createSwitchNavigator } from "react-navigation";
+import { createBottomTabNavigator, createAppContainer, createSwitchNavigator } from "react-navigation";
 import Typeface from "../styles/Font";
 import Color from "../styles/Color";
-import Home from "../view/screen/Home/Home";
 import Note from "../view/screen/Note/Note";
 
-const RemovingStack = createSwitchNavigator({
-    Home: {
-        screen: Home,
+const AddStack = createSwitchNavigator({
+    Note: {
+        screen: Note,
     },
-    Note: Note,
+    Detail:  {
+        screen: Note,
+    },
 },{
     initialRouteName: 'Note',
     headerMode: 'none',
@@ -30,25 +31,25 @@ RemovingStack.navigationOptions = ({ navigation }) => {
     };
 };
 
-const NoteNavigator = createMaterialTopTabNavigator({
-    Note: {
-        screen: RemovingStack,
+const NoteNavigator = createBottomTabNavigator({
+    Home: {
+        screen: Home,
         navigationOptions: {
             title: Typeface.toCase({
-                text: 'Ghi chú',
-                type: Typeface.type.default,
-            }),
-        }
-    },
-    Bill: {
-        screen: Note,
-        navigationOptions: {
-            title: Typeface.toCase({
-                text: 'Hóa đơn',
+                text: 'Thêm giao dịch',
                 type: Typeface.type.default,
             }),
        }
     },
+    AddStack: {
+        screen: AddStack,
+        navigationOptions: {
+            title: Typeface.toCase({
+                text: 'Chi tiết',
+                type: Typeface.type.default,
+            }),
+       }
+    }
     // Bill: Bill,
 },{
     initialRouteName: 'Note',

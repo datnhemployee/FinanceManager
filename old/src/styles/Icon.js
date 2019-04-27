@@ -54,6 +54,8 @@ const NameList = {
     picture: 'picture-o',
 
     send: 'send-o',
+
+    edit: 'edit',
 }
 
 const untapColor = Color.Navigation.untapped;
@@ -109,20 +111,10 @@ export default {
     //     }={}) => isTapped ?
     //     <AntDesign name={NameList.add} size={size} color={tapColor}/>
     //     :<AntDesign name={NameList.add} size={size} color={untapColor}/>,
-    Note: ({
-        isTapped = false,
+    Edit: ({
         size = Size.default,
-        tapColor = Color.Black,
-        }={}) => isTapped ?
-            <FontAwesome name={NameList.note_tapped} size={size} color={tapColor}/>
-            :<FontAwesome name={NameList.note_untapped} size={size} color={untapColor}/>,
-    // Notebook: ({
-    //     isTapped = false,
-    //     size = Size.default,
-    //     tapColor = Color.Black,
-    //     }={}) => isTapped ?
-    //         <SimpleLineIcons name={NameList.notebook_tapped} size={size} color={tapColor}/>
-    //         :<SimpleLineIcons name={NameList.notebook_untapped} size={size} color={untapColor}/>,
+        color = Color.Black,
+        }={}) => <AntDesign name={NameList.edit} size={size} color={color}/>,
     Left: ({
         size = Size.default,
         color = Color.Black,
