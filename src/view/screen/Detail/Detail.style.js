@@ -21,21 +21,14 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     borderBottomColor: Color.Gray,
     height: height / 10
-    // borderWidth: 1,
-    // borderWidth: 1,
   },
   body: {
-    // flex: 8,
     height: (5 * height) / 10
-    // borderWidth: 1,
   },
   footer: {
-    // flex: 1,
     height: (1 * height) / 10,
     borderTopWidth: 1,
     borderTopColor: Color.Gray
-    // borderWidth: 1,
-    // borderRadius: 10,
   }
 });
 
@@ -45,44 +38,35 @@ export const substyles = {
       ...Typeface.header[4],
       textAlignVertical: "center",
       textAlign: "center"
-      // color: Color.Black,
-      // borderWidth: 1,
     },
     backButton: {
       ...Typeface.header[5],
       textAlign: "center",
       textAlignVertical: "center",
-      // borderWidth: 1,
       justifyContent: "center",
       alignItems: "center"
     },
     deleteAllButton: {
-      ...Typeface.header[4],
-      textAlign: "center"
-      // borderWidth: 1,
+      ...Typeface.subtitle[1],
+      color: Color.Red,
+      margin: 5
     }
-    // mid: {
-    //   change: {
-    //     ...Typeface.default,
-    //     textAlign: "center",
-    //     textAlignVertical: "center",
-    //     color: Color.DarkGreen
-    //   }
-    // }
   },
   body: {
     container: {
-      ...Typeface.subtitle[1],
-      flex: 1,
       height: 40,
+      flex: 1,
       flexDirection: "row",
       justifyContent: "space-between"
     },
+    containerText: {
+      ...Typeface.subtitle[1],
+      fontSize: 20
+    },
     top: {
       dateLabel: {
-        // flex: 1,
-        // borderWidth: 1,
         ...Typeface.body[1],
+        fontSize: 20,
         height: 40,
         textAlign: "center",
         textAlignVertical: "center"

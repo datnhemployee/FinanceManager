@@ -23,19 +23,31 @@ export default class extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.navigate = this.navigate.bind(this);
+  }
+  navigate() {
+    ///Bug: code điều hướng trang khi nhấn "Thêm thu chi"
   }
 
   getProps() {
     let {
       dateLabel = [params.dateLableText],
+      detailList = [...[], ...params.detailList],
+      backButtonOnClick = () => {
+        console.log(`Vừa nhấn trở lại`);
+      },
+      deleteAllButtonOnClick = () => {
+        console.log(`Vừa nhấn Xóa Tất cả`);
+      }
 
-      detailList = [...[], ...params.detailList]
       // list = [params.defaultText]
       //   detailList = [params.detailList]
     } = this.props;
     return {
       dateLabel,
-      detailList
+      detailList,
+      backButtonOnClick,
+      deleteAllButtonOnClick
     };
   }
 
@@ -52,14 +64,13 @@ export default class extends Component {
     );
   }
 
-  deleteButton() {
-    let { deleteButtonOnClick } = this.getProps();
+  deleteAllButton() {
+    let { deleteAllButtonOnClick } = this.getProps();
     return (
-      <TouchableOpacity
-        style={substyles.header.deleteAllButton}
-        onPress={deleteButtonOnClick}
-      >
-        <Text style={substyles.header.deleteText}>{params.deleteText}</Text>
+      <TouchableOpacity onPress={deleteAllButtonOnClick}>
+        <Text style={substyles.header.deleteAllButton}>
+          {params.deleteText}
+        </Text>
       </TouchableOpacity>
     );
   }
@@ -87,8 +98,8 @@ export default class extends Component {
   detailElement(expenseName, amount, index) {
     return (
       <View style={substyles.body.container} key={index}>
-        <Text style={substyles.body.container}>{expenseName}</Text>
-        <Text style={substyles.body.top.container}>{amount}</Text>
+        <Text style={substyles.body.containerText}>{expenseName}</Text>
+        <Text style={substyles.body.containerText}>{amount}</Text>
       </View>
     );
   }
@@ -111,7 +122,7 @@ export default class extends Component {
     return this.title();
   }
   rightHeader() {
-    return this.deleteButton();
+    return this.deleteAllButton();
   }
 
   topBody() {
