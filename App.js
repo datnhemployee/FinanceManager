@@ -1,25 +1,19 @@
+import React, { Component } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import Detail from "./src/view/screen/Detail/Detail";
 
-import React, {Component} from 'react';
-import { StyleSheet, Text, View} from 'react-native';
-import Home from './src/view/screen/Home/Home';
-
-const url = 
-  `https://facebook.github.io/react-native/docs/assets/favicon.png`;
+const url = `https://facebook.github.io/react-native/docs/assets/favicon.png`;
 export default class App extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
   }
-  async componentDidMount () {
-
-  }
+  async componentDidMount() {}
 
   render() {
     return (
-      <View style={{flex: 1}}>
-        <Home />
+      <View style={{ flex: 1 }}>
+        <Detail />
       </View>
     );
-        
   }
 }
-
