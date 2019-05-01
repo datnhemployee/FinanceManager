@@ -14,7 +14,7 @@ const detailList = [
   { expenseName: "Kem", amount: 8000 },
   { expenseName: "Bánh cốm", amount: 15000 }
 ];
-export default (params = {
+export default params = {
   detailList,
   defaultDate: Typeface.toCase({
     text: format({ day: 5, month: 4, year: 2019 }),
@@ -44,4 +44,4 @@ export default (params = {
     text: format({ day: day, month: month, year: year }),
     type: Typeface.type.overline
   })
-});
+};
