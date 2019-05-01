@@ -84,11 +84,22 @@ export default class extends Component {
     let { dateLabel } = this.getProps();
     return <Text style={substyles.body.top.dateLabel}>{dateLabel}</Text>;
   }
-  detailElement(expenseName, amount) {
+  detailElement(expenseName, amount, index) {
     return (
-      <View style={substyles.body.container}>
+      <View style={substyles.body.container} key={index}>
         <Text style={substyles.body.top.dateLabel}>{expenseName}</Text>
         <Text style={substyles.body.top.dateLabel}>{amount}</Text>
+      </View>
+    );
+  }
+
+  detailList() {
+    let { detailList } = this.getProps();
+    return (
+      <View>
+        {detailList.map((element, index) => {
+          return this.detailElement(element.expenseName, element.amount, index);
+        })}
       </View>
     );
   }
@@ -96,22 +107,11 @@ export default class extends Component {
   //   detailList() {
   //     let { detailList } = this.getProps();
   //     return (
-  //       <View style={styles.header}>
-  //         {detailList.forEach(element => {
-  //           this.detailElement(element.expenseName, element.amount);
-  //         })}
+  //       <View>
+  //         {this.detailElement(detailList[0].expenseName, detailList[0].amount)}
   //       </View>
   //     );
   //   }
-
-  detailList() {
-    let { detailList } = this.getProps();
-    return (
-      <View>
-        {this.detailElement(detailList[0].expenseName, detailList[0].amount)}
-      </View>
-    );
-  }
 
   leftHeader() {
     return this.backButton();
