@@ -10,18 +10,22 @@ export default (params = {
   }),
   title: Typeface.toCase({
     text: "Chi tiết",
-    type: Typeface.type.default
+    type: Typeface.type.overline
   }),
   defaultText: Typeface.toCase({
     text: "Trống",
     type: Typeface.type.default
   }),
   btnAddText: Typeface.toCase({
-    text: "Thêm chi tiêu",
+    text: "Thêm thu chi",
     type: Typeface.type.button
   }),
-  deleteText: TypeError.toCase({
-    text: "<",
+  deleteText: Typeface.toCase({
+    text: "Xóa tất cả",
     type: Typeface.type.button
+  }),
+  backButtonIcon: Icon.Left({
+    size: Size.intermediate,
+    color: Color.Gray
   })
 });
