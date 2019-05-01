@@ -41,27 +41,40 @@ export default StyleSheet.create({
 
 export const substyles = {
   header: {
-    top: {
-      changeTitle: {
-        ...Typeface.header[5],
-        textAlign: "center",
-        textAlignVertical: "center"
-        // color: Color.Black,
-        // borderWidth: 1,
-      }
+    title: {
+      ...Typeface.header[4],
+      textAlignVertical: "center",
+      textAlign: "center"
+      // color: Color.Black,
+      // borderWidth: 1,
     },
-    mid: {
-      change: {
-        ...Typeface.header[3],
-        textAlign: "center",
-        textAlignVertical: "center",
-        color: Color.DarkGreen
-      }
+    backButton: {
+      ...Typeface.header[5],
+      textAlign: "center",
+      textAlignVertical: "center",
+      // borderWidth: 1,
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    deleteAllButton: {
+      ...Typeface.header[4],
+      textAlign: "center"
+      // borderWidth: 1,
     }
+    // mid: {
+    //   change: {
+    //     ...Typeface.default,
+    //     textAlign: "center",
+    //     textAlignVertical: "center",
+    //     color: Color.DarkGreen
+    //   }
+    // }
   },
   body: {
     container: {
+      ...Typeface.body[2],
       flex: 1,
+      height: 40,
       flexDirection: "row",
       justifyContent: "space-between"
     },
@@ -69,8 +82,8 @@ export const substyles = {
       dateLabel: {
         // flex: 1,
         // borderWidth: 1,
+        ...Typeface.header[6],
         height: 40,
-        ...Typeface.overline,
         textAlign: "center",
         textAlignVertical: "center"
       }

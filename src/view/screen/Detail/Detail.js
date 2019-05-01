@@ -56,7 +56,7 @@ export default class extends Component {
     let { deleteButtonOnClick } = this.getProps();
     return (
       <TouchableOpacity
-        style={substyles.header.deleteButton}
+        style={substyles.header.deleteAllButton}
         onPress={deleteButtonOnClick}
       >
         <Text style={substyles.header.deleteText}>{params.deleteText}</Text>
@@ -87,8 +87,8 @@ export default class extends Component {
   detailElement(expenseName, amount, index) {
     return (
       <View style={substyles.body.container} key={index}>
-        <Text style={substyles.body.top.dateLabel}>{expenseName}</Text>
-        <Text style={substyles.body.top.dateLabel}>{amount}</Text>
+        <Text style={substyles.body.container}>{expenseName}</Text>
+        <Text style={substyles.body.top.container}>{amount}</Text>
       </View>
     );
   }
@@ -103,15 +103,6 @@ export default class extends Component {
       </View>
     );
   }
-
-  //   detailList() {
-  //     let { detailList } = this.getProps();
-  //     return (
-  //       <View>
-  //         {this.detailElement(detailList[0].expenseName, detailList[0].amount)}
-  //       </View>
-  //     );
-  //   }
 
   leftHeader() {
     return this.backButton();
