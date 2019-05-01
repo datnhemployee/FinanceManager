@@ -59,7 +59,23 @@ export const substyles = {
       }
     }
   },
-  body: {},
+  body: {
+    container: {
+      flex: 1,
+      flexDirection: "row",
+      justifyContent: "space-between"
+    },
+    top: {
+      dateLabel: {
+        // flex: 1,
+        // borderWidth: 1,
+        height: 40,
+        ...Typeface.overline,
+        textAlign: "center",
+        textAlignVertical: "center"
+      }
+    }
+  },
   footer: {
     navigateButton: {
       flex: 1,

@@ -26,9 +26,16 @@ export default class extends Component {
   }
 
   getProps() {
-    let { list = [params.defaultText] } = this.props;
+    let {
+      dateLabel = [params.dateLableText],
+
+      detailList = [...[], ...params.detailList]
+      // list = [params.defaultText]
+      //   detailList = [params.detailList]
+    } = this.props;
     return {
-      list
+      dateLabel,
+      detailList
     };
   }
 
@@ -73,6 +80,39 @@ export default class extends Component {
     );
   }
 
+  dateLable() {
+    let { dateLabel } = this.getProps();
+    return <Text style={substyles.body.top.dateLabel}>{dateLabel}</Text>;
+  }
+  detailElement(expenseName, amount) {
+    return (
+      <View style={substyles.body.container}>
+        <Text style={substyles.body.top.dateLabel}>{expenseName}</Text>
+        <Text style={substyles.body.top.dateLabel}>{amount}</Text>
+      </View>
+    );
+  }
+
+  //   detailList() {
+  //     let { detailList } = this.getProps();
+  //     return (
+  //       <View style={styles.header}>
+  //         {detailList.forEach(element => {
+  //           this.detailElement(element.expenseName, element.amount);
+  //         })}
+  //       </View>
+  //     );
+  //   }
+
+  detailList() {
+    let { detailList } = this.getProps();
+    return (
+      <View>
+        {this.detailElement(detailList[0].expenseName, detailList[0].amount)}
+      </View>
+    );
+  }
+
   leftHeader() {
     return this.backButton();
   }
@@ -82,6 +122,14 @@ export default class extends Component {
   rightHeader() {
     return this.deleteButton();
   }
+
+  topBody() {
+    return this.dateLable();
+  }
+  midBody() {
+    return this.detailList();
+  }
+
   header() {
     return (
       <View style={styles.header}>
@@ -96,7 +144,10 @@ export default class extends Component {
     let {} = this.getProps();
 
     return (
-      <ScrollView style={styles.body} showsVerticalScrollIndicator={false} />
+      <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
+        {this.topBody()}
+        {this.midBody()}
+      </ScrollView>
     );
   }
 
