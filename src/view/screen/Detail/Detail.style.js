@@ -72,7 +72,7 @@ export const substyles = {
   },
   body: {
     container: {
-      ...Typeface.body[2],
+      ...Typeface.subtitle[1],
       flex: 1,
       height: 40,
       flexDirection: "row",
@@ -82,7 +82,7 @@ export const substyles = {
       dateLabel: {
         // flex: 1,
         // borderWidth: 1,
-        ...Typeface.header[6],
+        ...Typeface.body[1],
         height: 40,
         textAlign: "center",
         textAlignVertical: "center"
