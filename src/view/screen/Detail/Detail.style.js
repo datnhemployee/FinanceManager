@@ -40,7 +40,7 @@ export const substyles = {
       textAlign: "center"
     },
     backButton: {
-      ...Typeface.header[5],
+      ...Typeface.header[1],
       textAlign: "center",
       textAlignVertical: "center",
       justifyContent: "center",
@@ -48,6 +48,7 @@ export const substyles = {
     },
     deleteAllButton: {
       ...Typeface.subtitle[1],
+      fontSize: 20,
       color: Color.Red,
       margin: 5
     }
@@ -61,12 +62,12 @@ export const substyles = {
     },
     containerText: {
       ...Typeface.subtitle[1],
-      fontSize: 20
+      fontSize: 30
     },
     top: {
       dateLabel: {
         ...Typeface.body[1],
-        fontSize: 20,
+        fontSize: 30,
         height: 40,
         textAlign: "center",
         textAlignVertical: "center"
