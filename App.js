@@ -1,3 +1,6 @@
+import React, { Component } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import Detail from "./src/view/screen/Detail/Detail";
 
 import React, {Component} from 'react';
 import { StyleSheet, Text, View} from 'react-native';
@@ -9,10 +12,10 @@ import SpenseController from './src/controller/SpenseController';
 const url = 
   `https://facebook.github.io/react-native/docs/assets/favicon.png`;
 export default class App extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
   }
-  async componentDidMount () {
+  async componentDidMount() {}
 
     let test = 
     SpenseController.insert_spense()
@@ -27,7 +30,5 @@ export default class App extends Component {
           /> */}
       </View>
     );
-        
   }
 }
-
