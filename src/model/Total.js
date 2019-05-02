@@ -7,11 +7,11 @@ export default class Total {
         let monthID =  gap().month();
         let yearID =  gap().year();
         return {
-            _id: yearID,
+            Id: yearID,
             total: 0,
             typeList: [
                 {
-                    _id: 0,
+                    Id: 0,
                     total: 0,
                     spenseList: [{
 
@@ -20,11 +20,11 @@ export default class Total {
             ],
             monthlyList: [
                 {
-                    _id: monthID,
+                    Id: monthID,
                     total: 0,
                     typeList: [
                         {
-                            _id: 0,
+                            Id: 0,
                             total: 0,
                             spenseList: [{
 
@@ -33,11 +33,11 @@ export default class Total {
                     ],
                     dailyList: [
                         {
-                            _id: dayID,
+                            Id: dayID,
                             total: 0,
                             typeList: [
                                 {
-                                    _id: 0,
+                                    Id: 0,
                                     total: 0,
                                     spenseList: [{
                                         

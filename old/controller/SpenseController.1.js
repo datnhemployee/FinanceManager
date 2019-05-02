@@ -22,6 +22,12 @@ let TotalDoc = new Datastore({
 export default class SpenseController{
     constructor () {}
 
+    static async deleteAll () {
+        await SpenseDoc.removeAsync({
+            _id: {$gte: 0}
+        })
+    }
+
     static async existType (typeID) {
         if (!typeID)
             return new ActionResult(

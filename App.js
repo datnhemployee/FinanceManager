@@ -1,11 +1,18 @@
 
 import React, {Component} from 'react';
-import { StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View, AsyncStorage} from 'react-native';
 // import FirstLetterIcon from './src/view/component/FirstLetterIcon/FirstLetterIcon';
 import Home from './src/view/screen/Home/Home';
 import SpenseController from './src/controller/SpenseController';
+import Spense from './src/model/Spense';
+import ConstantValue from './src/constant/ConstantValue';
+import Datastore from 'react-native-local-mongodb';
 
-
+let TestDoc = new Datastore({
+  filename: 'Test',
+  autoload: true,
+  inMemoryOnly: false,
+})
 const url = 
   `https://facebook.github.io/react-native/docs/assets/favicon.png`;
 export default class App extends Component {
@@ -14,8 +21,17 @@ export default class App extends Component {
   }
   async componentDidMount () {
 
-    let test = 
-    SpenseController.insert_spense()
+    let test = await Spense.default();
+    test.price = 5000;
+    console.log('test',JSON.stringify(test));
+    // console.log('insert',await SpenseController.insert_spense(test));
+
+    // console.log('insert test',JSON.stringify(await TestDoc.insertAsync({a: 300})));
+    // console.log('get test',JSON.stringify(await TestDoc.findAsync({})));
+    await SpenseController.deleteAll();
+    console.log('get all spense',JSON.stringify(await SpenseController.getAllSpense()));
+    console.log('get all total',JSON.stringify(await SpenseController.getAllTotal()));
+    console.log('get all type',JSON.stringify(await SpenseController.getAllType()));
   }
 
   render() {
