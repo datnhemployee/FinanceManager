@@ -8,7 +8,7 @@ export default class Type {
 
     static default () {
         return {
-            _id: ConstantValue.INIT_NUMBER,
+            _id: IDGenerater.getNextID(IDGenerater.nextID_Type),
             name: `Không tên`,
             isIncome: false,
             color: Color.Gray,

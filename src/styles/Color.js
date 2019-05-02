@@ -8,7 +8,7 @@ class RBG {
     get B () {return this._b}
     get G () {return this._g}
     toColor () { 
-        return `rbg(${this._r},${this._b},${this._g})`;
+        return `rbg(${this._r}, ${this._b}, ${this._g})`;
     }
 }
 const RBGColor = {

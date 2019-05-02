@@ -29,6 +29,11 @@ export default class extends Component {
 
         this.navigate = this.navigate.bind(this);
         this.backButtonOnClick = this.backButtonOnClick.bind(this);
+        this.cancelButtonOnClick = this.cancelButtonOnClick.bind(this);
+    }
+
+    cancelButtonOnClick () {
+        this.navigate();
     }
 
     navigate () {
@@ -154,12 +159,14 @@ export default class extends Component {
         return (
             <Note 
                 isNavigatedToNote= {isNavigatedToNote}
-                backButtonOnClick = {this.backButtonOnClick}/>
+                backButtonOnClick = {this.backButtonOnClick}
+                cancelButtonOnClick = {this.cancelButtonOnClick}/>
         )
     }
 
     render() {
         let {
+            isNavigatedToNote,
         } = this.state;
         return (
             <View 
@@ -169,7 +176,7 @@ export default class extends Component {
                 {this.note()}
                 <Modal 
                     transparent={false}
-                    visible={!this.state.isNavigatedToNote}
+                    visible={!isNavigatedToNote}
                     animationType="slide">
                     <View style={styles.container}>
                         {this.header()}

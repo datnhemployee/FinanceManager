@@ -2,6 +2,8 @@ import { AsyncStorage } from "react-native";
 import Type from "./Type";
 import IDGenerater from "./IDGenerater";
 import ConstantValue from "../constant/ConstantValue";
+import Color from "../styles/Color";
+import { gap } from "../utils/DateConvert";
 
 const INIT_NUMBER = ConstantValue.INIT_NUMBER;
 export default class Spense{
@@ -12,9 +14,9 @@ export default class Spense{
             _id: await IDGenerater.getNextID(IDGenerater.nextID_Spense),
             name: `Không tên`,
             description: `Không`,
-            type : INIT_NUMBER,
+            typeID : INIT_NUMBER,
             price : 0,
-            date : new Date(),
+            dayID : gap().date(),
         }
     }
 

@@ -43,31 +43,37 @@ export default StyleSheet.create({
 });
 
 export const substyles = {
-    header: StyleSheet.create({
-        title: {
-            flex: 5,
-            ...Typeface.header[6],
-            color: Color.Black,
-            textAlign: 'left',
-            textAlignVertical: 'center',
+    header: {
+        mid: {
+            title: {
+                flex: 5,
+                ...Typeface.header[6],
+                color: Color.Black,
+                textAlign: 'left',
+                textAlignVertical: 'center',
+            },
         },
-        cancelButton: {
-            flex: 1,
+        right: {
+            cancelButton: {
+                flex: 1,
+            },
+            cancelText: {
+                flex: 1,
+                ...Typeface.button,
+                textAlign: 'left',
+                textAlignVertical: 'center',
+                color:Color.Red,
+            },
         },
-        backButton: {
-            flex: 1,
-            // borderWidth: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
+        left: {
+            backButton: {
+                flex: 1,
+                // borderWidth: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+            },
         },
-        cancelText: {
-            flex: 1,
-            ...Typeface.button,
-            textAlign: 'left',
-            textAlignVertical: 'center',
-            color:Color.Red,
-        }
-    }),
+    },
     body: {
         container: {
             flex: 1,

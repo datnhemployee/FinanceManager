@@ -46,9 +46,12 @@ export default class extends Component {
                         ...Typeface.header[5],
                         borderStyle: 'dashed',
                         fontSize: 30,
+                        borderWidth: 2,
                     }: {
                         fontFamily: Font.UVF.Verner,
                         fontSize: 30,
+                        color: Color.White,
+                        backgroundColor: Color.Blue,
                     },
                 ]}> 
                 {Typeface.toCase({

@@ -20,7 +20,7 @@ import Note from '../Note/Note';
 import Total from '../../../model/Total';
 import Card from '../../component/Card/Card';
 
-export default class extends Component {
+export default class Detail extends Component {
     constructor (props) {
         super(props);
         this.state = {

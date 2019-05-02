@@ -139,7 +139,7 @@ export default class extends Component {
                 SpentTypesList.splice(i,1);
             }
         }
-        console.log('SpentTypesList',JSON.stringify(SpentTypesList))
+        // console.log('SpentTypesList',JSON.stringify(SpentTypesList))
         const isEmpty = SpentTypesList.length == 0;
         if (!isEmpty) SpentTypesList = params.defaultType;
         return (

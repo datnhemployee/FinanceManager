@@ -11,7 +11,7 @@ export default style = StyleSheet.create({
         includeFontPadding: false,
         paddingTop: 10,
         color: Color.Black,
-        borderWidth: 2,
+        borderWidth: 0,
     },
     container: {
         flex: 1,

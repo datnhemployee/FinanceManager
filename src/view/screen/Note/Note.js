@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     Modal,
     KeyboardAvoidingView,
+    ToastAndroid,
 } from 'react-native';
 import styles, { substyles } from './Note.style';
 import params from './Note.default';
@@ -16,12 +17,58 @@ import FirstLetterIcon from '../../component/FirstLetterIcon/FirstLetterIcon';
 import Typeface from '../../../styles/Font';
 import Color from '../../../styles/Color';
 import { ScrollView } from 'react-native-gesture-handler';
+import Spense from '../../../model/Spense';
+import SpenseController from '../../../controller/SpenseController';
 
 export default class extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            spense: Spense.default(),
         }
+
+        this._backButtonOnClick = this._backButtonOnClick.bind(this);
+        this._onChangeDescription = this._onChangeDescription.bind(this);
+        this._onChangeName = this._onChangeName.bind(this);
+        this._onChangePrice = this._onChangePrice.bind(this);
+    }
+
+    _onInputChange (text, key) {
+        let {
+            spense,
+        } = this.state;
+        this.setState({spense: {
+            ...spense,
+            ...{
+                [key]: text,
+            },
+        }});
+    }
+
+    _onChangeName (text) {
+        this._onInputChange(text,'name')
+    }
+
+    _onChangePrice (text) {
+        this._onInputChange(text,'price')
+    }
+
+    _onChangeDescription (text) {
+        this._onInputChange(text,'description')
+    }
+
+    async _backButtonOnClick () {
+        let {
+            backButtonOnClick,
+        } = this.getProps();
+        let {
+            spense
+        } = this.state;
+        if(!await SpenseController.insert(spense))
+            ToastAndroid.show('Lỗi lưu dữ liệu.')
+
+        backButtonOnClick();
+        ToastAndroid.show('Lưu dữ liệu thành công.')
     }
 
     getProps () {
@@ -31,7 +78,7 @@ export default class extends Component {
             backButtonOnClick = () => {console.log(`Vừa nhấn trở lại`)},
             cancelButtonOnClick = () => {console.log(`Vừa nhấn hủy`)},
             editButtonOnClick = () => {console.log(`Vừa nhấn sửa loại`)},
-            saveButtonOnClick = () => {console.log(`Vừa nhấn lưu`)},
+            // saveButtonOnClick = () => {console.log(`Vừa nhấn lưu`)},
         } = this.props;
         return {
             isNavigatedToNote,
@@ -43,34 +90,35 @@ export default class extends Component {
         }
     }
 
-    saveButton() {
-        let {
-            saveButtonOnClick,
-        } = this.getProps();
-        return (
-            <TouchableOpacity
-                style={substyles.footer.saveButton}
-                onPress={saveButtonOnClick}>
-                <Text 
-                style={substyles.footer.saveButtonText}
-                > 
-                {params.saveButtonText}
-                </Text>
-            </TouchableOpacity>
-            
-            );
-    }
+    // saveButton() {
+    //     let {
+    //         saveButtonOnClick,
+    //     } = this.getProps();
+    //     let localStyles = substyles.footer;
+    //     return (
+    //         <TouchableOpacity
+    //             style={localStyles.saveButton}
+    //             onPress={saveButtonOnClick}>
+    //             <Text 
+    //             style={localStyles.saveButtonText}
+    //             > 
+    //             {params.saveButtonText}
+    //             </Text>
+    //         </TouchableOpacity>
+    //         );
+    // }
 
     cancelButton () {
         let {
             cancelButtonOnClick,
         } = this.getProps();
+        let localStyles = substyles.header.right;
         return (
             <TouchableOpacity 
-                style={substyles.header.cancelButton}
+                style={localStyles.cancelButton}
                 onPress={cancelButtonOnClick}>
                 <Text 
-                    style={substyles.header.cancelText}>
+                    style={localStyles.cancelText}>
                     {params.cancelText}
                 </Text>
             </TouchableOpacity>
@@ -78,9 +126,10 @@ export default class extends Component {
     }
 
     dateLable () {
+        let localStyles = substyles.body.top;
         return (
             <Text 
-                style={substyles.body.top.dateLable}>
+                style={localStyles.dateLable}>
                 {params.dateLableText}
             </Text>
         )
@@ -145,8 +194,9 @@ export default class extends Component {
     }
 
     title() {
+        let localStyles = substyles.header.mid;
         return (
-            <Text style={substyles.header.title}>
+            <Text style={localStyles.title}>
                 {params.title}
             </Text>
         )
@@ -190,6 +240,7 @@ export default class extends Component {
                 keyboardType ={'email-address'}
                 style={substyles.body.mid.inputName}
                 placeholder={params.placeholder.inputName}
+                onChangeText={(text) => {this._onChangeName(text)}}
             />
         )
     }
@@ -200,6 +251,7 @@ export default class extends Component {
                 keyboardType ={'number-pad'}
                 style={substyles.body.mid.inputPrice}
                 placeholder={params.placeholder.inputPrice}
+                onChangeText={(text) => {this._onChangePrice(text)}}
             />
         )
     }
@@ -211,6 +263,7 @@ export default class extends Component {
                 style={substyles.body.mid.inputDescription}
                 placeholder={params.placeholder.inputDescription}
                 multiline={true}
+                onChangeText={(text) => {this._onChangeDescription(text)}}
             />
         )
     }
@@ -239,12 +292,12 @@ export default class extends Component {
 
     backButton () {
         let {
-            backButtonOnClick,
         } =   this.getProps();
+        const localStyle = substyles.header.left;
         return (
             <TouchableOpacity 
-                style={substyles.header.backButton}
-                onPress={backButtonOnClick}>
+                style={localStyle.backButton}
+                onPress={async () => {await this._backButtonOnClick()}}>
                 {params.backButtonIcon}
             </TouchableOpacity>
         )
@@ -275,7 +328,7 @@ export default class extends Component {
         return (
             <ScrollView 
                 style={styles.body}
-                showsVerticalScrollIndicator={false}>>
+                showsVerticalScrollIndicator={false}>
                 {this.topBody()}
                 {this.midBody()}
                 {this.bottomBody()}
@@ -283,13 +336,13 @@ export default class extends Component {
         );
     }
 
-    footer () {
-        return (
-            <View style={styles.footer}>
-                {this.saveButton()}
-            </View>
-        );
-    }
+    // footer () {
+    //     return (
+    //         <View style={styles.footer}>
+    //             {this.saveButton()}
+    //         </View>
+    //     );
+    // }
 
       render() {
         let {
@@ -307,7 +360,7 @@ export default class extends Component {
                 >
                     {this.header()}
                     {this.body()}
-                    {this.footer()}
+                    {/* {this.footer()} */}
                 </KeyboardAvoidingView>
             </Modal>
             

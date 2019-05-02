@@ -26,4 +26,17 @@ export default class IDGenerater {
             })
         return result;
     }
+
+    static async saveChange (name) {
+        let id = IDGenerater.getNextID(name);
+
+        await AsyncStorage.setItem(
+            name,
+            id,
+            (err) =>{
+                console.log("saveChange Error: "+ err);
+            }
+        )
+
+    }
 }
