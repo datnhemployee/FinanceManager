@@ -3,7 +3,7 @@ import { gap } from "../utils/DateConvert";
 export default class Total {
     constructor () {}
     static default () {
-        let dayID = gap().date();
+        let dayID = gap().day();
         let monthID =  gap().month();
         let yearID =  gap().year();
         return {

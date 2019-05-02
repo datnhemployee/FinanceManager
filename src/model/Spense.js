@@ -14,7 +14,7 @@ export default class Spense{
             description: `Không`,
             typeID : INIT_NUMBER,
             price : 0,
-            dayID : gap().date(),
+            dayID : gap().day(),
         }
     }
 

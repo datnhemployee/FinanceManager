@@ -29,13 +29,13 @@ export const gap = ({
             return null;
     } 
     return {
-        date () {
+        day () {
             let res = Math.abs(present - previous) / 1000;
             return Math.floor(res / 86400);
         },
         month () {
             let res = (present.getFullYear() - previous.getFullYear()) * 12;
-            res = res - previous.getMonth() + 1;
+            res = res - previous.getMonth();
             res = res + present.getMonth();
             return res <= 0 ? 0: res;
         },
@@ -49,7 +49,7 @@ export const getDatesFromID = (dateID = 0) => {
     let res = new Date(2019,3,5 + dateID);
     return {
         day: res.getDate(),
-        month: res.getMonth() + 1,
+        month: res.getMonth(),
         year: res.getFullYear(),
     }
 }
