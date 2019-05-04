@@ -19,17 +19,42 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Note from '../Note/Note';
 import Total from '../../../model/Total';
 import Card from '../../component/Card/Card';
+import SpenseController from '../../../controller/SpenseController';
 
 export default class extends Component {
     constructor (props) {
         super(props);
         this.state = {
             isNavigatedToNote: false,
+            change: 0,
+            totalList: [],
         }
 
         this.navigate = this.navigate.bind(this);
         this.backButtonOnClick = this.backButtonOnClick.bind(this);
         this.cancelButtonOnClick = this.cancelButtonOnClick.bind(this);
+    }
+
+    async componentDidMount () {
+
+        this.setState({change: await SpenseController.getChange()});
+        // console.log('this.state.change',JSON.stringify(this.state))
+
+        let today = new Date();
+        let temp = [
+            await SpenseController.getDailyTotal(
+                today.getDate(),
+                today.getMonth(),
+                today.getFullYear(),
+            ),
+        ];
+        console.log('temp',JSON.stringify(temp))
+
+        if(!temp[0])
+            this.setState({totalList: [Total.default()]});
+        else 
+            this.setState({totalList: temp});
+        console.log('totalList',JSON.stringify(this.state.totalList))
     }
 
     cancelButtonOnClick () {
@@ -41,19 +66,19 @@ export default class extends Component {
 
         this.setState({isNavigatedToNote: temp});
     }
+
     getProps () {
         let {
-            change = 0,
-            totalOfDateList = [Total.default()],
+            
         } = this.props;
         return {
-            change,
-            totalOfDateList,
         }
     }
 
-    backButtonOnClick () {
+    async backButtonOnClick (price) {
         this.navigate();
+
+        await SpenseController.saveChange(price);
     }
 
     navigateNoteButton () {
@@ -82,17 +107,15 @@ export default class extends Component {
 
     change () {
         let {
-            change,
         } = this.getProps();
 
         const localStyles = substyles.header.mid;
-
         return (
             <Text 
                 style={localStyles.change}>
                 {/* {params.changeTitle} */}
                 {Typeface.toCase({
-                    text: change + ' đ',
+                    text: this.state.change + ' đ',
                     type: Typeface.type.default,    
                 })} 
             </Text>
@@ -108,7 +131,7 @@ export default class extends Component {
     botHeader () {
         return (<View/>)
     }
-      header () {
+    header () {
         return (
             <View style={styles.header}>
                 {this.topHeader()}
@@ -120,25 +143,24 @@ export default class extends Component {
 
     body () {
         let {
-            totalOfDateList,
         } = this.getProps();
 
+        console.log(JSON.stringify(this.state.totalList))
         return (
             <ScrollView 
+                on
                 style={styles.body}
                 showsVerticalScrollIndicator={false}>
-                {totalOfDateList.map((y)=> 
-                    y.monthlyTotal.map((m) =>
-                        m.dailyTotal.map((d) => 
-                            <Card 
-                                // style={{flex: 1}}
-                                key = {d._id + d.total}
-                                dateID = {d._id}
-                                total = {d.total}
-                                types = {d.types}
-                            />
-                        )
-                    )
+                {this.state.totalList.map((val)=> {
+                    console.log(JSON.stringify(val))
+                    return (
+                    <Card 
+                        // style={{flex: 1}}
+                        key = {val.Id + val.total}
+                        dayID = {val.Id}
+                        total = {val.total}
+                        types = {val.typeList}
+                    />)}
                 )}
             </ScrollView>
         );
@@ -153,21 +175,15 @@ export default class extends Component {
     }
 
     note () {
-        let {
-            isNavigatedToNote,
-        } = this.state;
         return (
             <Note 
-                isNavigatedToNote= {isNavigatedToNote}
+                isNavigatedToNote= {this.state.isNavigatedToNote}
                 backButtonOnClick = {this.backButtonOnClick}
                 cancelButtonOnClick = {this.cancelButtonOnClick}/>
         )
     }
 
     render() {
-        let {
-            isNavigatedToNote,
-        } = this.state;
         return (
             <View 
             style={styles.container}
@@ -176,7 +192,7 @@ export default class extends Component {
                 {this.note()}
                 <Modal 
                     transparent={false}
-                    visible={!isNavigatedToNote}
+                    visible={!this.state.isNavigatedToNote}
                     animationType="slide">
                     <View style={styles.container}>
                         {this.header()}

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import styles, { substyles } from './Note.style';
 import params from './Note.default';
-import { format } from '../../../utils/DateConvert';
+import { format, gap } from '../../../utils/DateConvert';
 import Type from '../../../model/Type';
 import FirstLetterIcon from '../../component/FirstLetterIcon/FirstLetterIcon';
 import Typeface from '../../../styles/Font';
@@ -19,18 +19,36 @@ import Color from '../../../styles/Color';
 import { ScrollView } from 'react-native-gesture-handler';
 import Spense from '../../../model/Spense';
 import SpenseController from '../../../controller/SpenseController';
+import TypeController from '../../../controller/TypeController';
 
 export default class extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            spense: Spense.default(),
+            spense: {
+                name: `Không tên`,
+                description: `Không`,
+                price : 0,
+            },
+            // isAvailable_name: false,
+            // isAvailable_price: false,
+            isIncome: false,
+            typeName: 'Không tên',
         }
 
         this._backButtonOnClick = this._backButtonOnClick.bind(this);
         this._onChangeDescription = this._onChangeDescription.bind(this);
         this._onChangeName = this._onChangeName.bind(this);
         this._onChangePrice = this._onChangePrice.bind(this);
+    }
+
+    async componentDidMount ( ) {
+        this.setState({
+            isIncome: await TypeController.isIncome(
+                this.state.spense.typeID,
+            ),
+        });
+        
     }
 
     _onInputChange (text, key) {
@@ -43,14 +61,27 @@ export default class extends Component {
                 [key]: text,
             },
         }});
+        
     }
 
     _onChangeName (text) {
-        this._onInputChange(text,'name')
+        this._onInputChange(text,'name');
+        // if(!!this.state.spense.name){
+        //     this.setState({isAvailable_name: true});
+        // } else {
+        //     this.setState({isAvailable_name: false});
+        // }
+        // console.log('isAvailable_name',this.state.isAvailable_name)
     }
 
     _onChangePrice (text) {
         this._onInputChange(text,'price')
+        // if(!!this.state.spense.price){
+        //     this.setState({isAvailable_price: true});
+        // } else {
+        //     this.setState({isAvailable_price: false});
+        // }
+        // console.log('isAvailable_price',this.state.isAvailable_price)
     }
 
     _onChangeDescription (text) {
@@ -61,32 +92,48 @@ export default class extends Component {
         let {
             backButtonOnClick,
         } = this.getProps();
-        let {
-            spense
-        } = this.state;
-        if(!await SpenseController.insert(spense))
-            ToastAndroid.show('Lỗi lưu dữ liệu.')
 
-        backButtonOnClick();
-        ToastAndroid.show('Lưu dữ liệu thành công.')
+        let isAvailable_name = !!this.state.spense.name || this.state.spense.name != '';
+        let isAvailable_price = !!this.state.spense.price || this.state.spense.price != 0;
+
+        if(!isAvailable_name
+            || !isAvailable_price){
+            ToastAndroid.show('Tên giao dịch và số tiền không hợp lệ. Lưu thất bại', ToastAndroid.LONG)
+            await backButtonOnClick();
+            return;
+        }
+        let isIncome = TypeController.isIncome(0);
+        if(!isIncome){
+            isIncome = false;
+        }
+
+        await SpenseController.insert({
+            ...this.state.spense,
+            ...{
+                price: Math.abs(parseInt(this.state.spense.price)) * (isIncome?+1:-1),
+                dayID: gap().day(),
+            }
+        })
+        await backButtonOnClick();
+        ToastAndroid.show('Lưu dữ liệu thành công.', ToastAndroid.LONG)
     }
 
     getProps () {
         let {
             isNavigatedToNote = false,
-            type = Type.default(),
+            // type = Type.default(),
             backButtonOnClick = () => {console.log(`Vừa nhấn trở lại`)},
-            cancelButtonOnClick = () => {console.log(`Vừa nhấn hủy`)},
+            // cancelButtonOnClick = () => {console.log(`Vừa nhấn hủy`)},
             editButtonOnClick = () => {console.log(`Vừa nhấn sửa loại`)},
             // saveButtonOnClick = () => {console.log(`Vừa nhấn lưu`)},
         } = this.props;
         return {
             isNavigatedToNote,
-            type,
+            // type,
             backButtonOnClick,
-            cancelButtonOnClick,
+            // cancelButtonOnClick,
             editButtonOnClick,
-            saveButtonOnClick,
+            // saveButtonOnClick,
         }
     }
 
@@ -108,22 +155,22 @@ export default class extends Component {
     //         );
     // }
 
-    cancelButton () {
-        let {
-            cancelButtonOnClick,
-        } = this.getProps();
-        let localStyles = substyles.header.right;
-        return (
-            <TouchableOpacity 
-                style={localStyles.cancelButton}
-                onPress={cancelButtonOnClick}>
-                <Text 
-                    style={localStyles.cancelText}>
-                    {params.cancelText}
-                </Text>
-            </TouchableOpacity>
-        )
-    }
+    // cancelButton () {
+    //     let {
+    //         cancelButtonOnClick,
+    //     } = this.getProps();
+    //     let localStyles = substyles.header.right;
+    //     return (
+    //         <TouchableOpacity 
+    //             style={localStyles.cancelButton}
+    //             onPress={cancelButtonOnClick}>
+    //             <Text 
+    //                 style={localStyles.cancelText}>
+    //                 {params.cancelText}
+    //             </Text>
+    //         </TouchableOpacity>
+    //     )
+    // }
 
     dateLable () {
         let localStyles = substyles.body.top;
@@ -160,13 +207,13 @@ export default class extends Component {
 
     typeName () {
         let {
-            type,
+            // type,
         } =   this.getProps()
         const localStyles = substyles.body.mid.typeInput.mid.detail;
         return (
             <Text style={localStyles.typeName} >
                 {Typeface.toCase({
-                    text: type.name,
+                    text: this.state.typeName,
                     type: Typeface.type.default,
                 })}
             </Text>
@@ -175,18 +222,18 @@ export default class extends Component {
 
     isIncome () {
         let {
-            type,
+            // type,
         } = this.getProps()
         const localStyles = substyles.body.mid.typeInput.mid.detail;
         return (
             <Text style={[
                 localStyles.isIncome,
-                type.isIncome ? {
+                this.state.isIncome ? {
                     backgroundColor: Color.LightGreen,
                 }:{
                     backgroundColor: Color.Red,
                 }]} >
-                {type.isIncome ? 
+                {this.state.isIncome ? 
                     params.income:
                     params.outcome}
             </Text>
@@ -204,7 +251,7 @@ export default class extends Component {
 
     inputType () {
         let {
-            type,
+            // type,
         } =   this.getProps();
         const localStyles = substyles.body.mid.typeInput;
         return (
@@ -217,9 +264,9 @@ export default class extends Component {
                 <View style={localStyles.mid.container} >
                     <FirstLetterIcon 
                         style={localStyles.mid.icon}
-                        firstLetter={type._id === 0 ? 
+                        firstLetter={this.state.typeName === 'Không tên' ? 
                             undefined:
-                            type.name[0]
+                            this.state.typeName[0]
                         }
                     />
 
@@ -310,7 +357,8 @@ export default class extends Component {
         return this.title();
     }
     rightHeader () {
-        return this.cancelButton();
+        // return this.cancelButton();
+        return (<View />);
     }
     header () {
     return (

@@ -23,6 +23,21 @@ let totalDoc = new Datastore({
 export default class SpenseController{
     constructor () {}
 
+    static async getChange () {
+        let result = await AsyncStorage.getItem("change");
+        if(result === 'undefined'){
+            await AsyncStorage.setItem("change",''+0);
+            return 0;
+        }
+        return result;
+    }
+
+    static async saveChange (price) {
+        await AsyncStorage.removeItem("change");
+        await AsyncStorage.setItem("change",''+price);
+        return price;
+    }
+
     static async getPeriodicallyID (dayID) {
         let {
             day,month,year
@@ -64,14 +79,14 @@ export default class SpenseController{
         return true;
     }
 
-    static async insert_spense(spense, isChecked =false) {
+    static async insert(spense, isChecked =false) {
         
         if(!isChecked) {
             let checkResult = await SpenseController.check(spense);
             // if(!checkResult.isOk())
             //     return checkResult;
             if(!checkResult)
-                return false;
+                return null;
         }
 
         spense = await spenseDoc.insertAsync(spense);
@@ -499,4 +514,28 @@ export default class SpenseController{
             ...total
         });
     }
+
+    static async getDailyTotal(day,month,year){
+        let date = new Date(year,month,day);
+
+        let dayID = gap({present: date}).day();
+        let monthID = gap({present: date}).month();
+        let yearID = gap({present: date}).year();
+
+        let total = await totalDoc.findOneAsync({
+            Id: yearID,
+        });
+        // console.log('total',JSON.stringify(total))
+        if(!total) return total;
+        
+        let monthly_index = total.monthlyList.findIndex((val)=>val.Id==monthID);
+        if(monthly_index == -1) return null;
+
+        let daily_index = total.monthlyList[monthly_index].dailyList.findIndex((val)=>val.Id==dayID);
+        if(daily_index == -1) return null;
+
+        return total.monthlyList[monthly_index].dailyList[daily_index];
+    }
+
+    
 }
