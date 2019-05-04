@@ -21,9 +21,15 @@ export default class extends Component {
     getProps () {
         let {
             firstLetter = '\+',
+            color,
+            fontSize = 30,
+            size = {width : 50, height : 50, borderRadius : 50},
         } = this.props;
         return {
             firstLetter,
+            color,
+            fontSize,
+            size,
         }
     }
     
@@ -36,22 +42,26 @@ export default class extends Component {
 
     body () {
         let {
-            firstLetter 
+            firstLetter,
+            color,
+            fontSize,
+            size,
         } = this.getProps();
         return (
             <Text 
                 style={[
                     styles.body,
+                    size,
                     firstLetter === '\+' ? {
                         ...Typeface.header[5],
                         borderStyle: 'dashed',
-                        fontSize: 30,
+                        fontSize: fontSize,
                         borderWidth: 2,
                     }: {
                         fontFamily: Font.UVF.Verner,
-                        fontSize: 30,
+                        fontSize: fontSize,
                         color: Color.White,
-                        backgroundColor: Color.Blue,
+                        backgroundColor: color,
                     },
                 ]}> 
                 {Typeface.toCase({
