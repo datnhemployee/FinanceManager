@@ -18,12 +18,23 @@ import { ScrollView } from "react-native-gesture-handler";
 import Note from "../Note/Note";
 import Total from "../../../model/Total";
 import Card from "../../component/Card/Card";
+import SpenseController from "../../../controller/SpenseController";
 
 export default class extends Component {
   constructor(props) {
     super(props);
     this.state = {};
     this.navigate = this.navigate.bind(this);
+    this.getListByDate = this.getListByDate.bind(this);
+  }
+  getListByDate() {
+    let { dateLabel, detailList } = this.getProps();
+    detailList = SpenseController.getListByDate(
+      dateLabel.getDate(),
+      dateLabel.getMonth() + 1,
+      dateLabel.getFullYear()
+    );
+    console.log(detailList);
   }
   navigate() {
     ///Bug: code điều hướng trang khi nhấn "Thêm thu chi"
@@ -34,7 +45,7 @@ export default class extends Component {
       detailedList= [],
       detailedDate =  new Date(),
       backButtonOnClick = () => {
-        console.log(`Vừa nhấn trở lại`);
+        console.log(`Clicked back button`);
       },
       deleteAllButtonOnClick = () => {
         console.log(`Vừa nhấn Xóa Tất cả`);
