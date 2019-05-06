@@ -56,7 +56,7 @@ const NameList = {
     send: 'send-o',
 }
 
-const untapColor = Color.Navigation.untapped;
+const untapColor = Color.Gray;
 
 export default {
     User: ({

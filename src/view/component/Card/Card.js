@@ -25,13 +25,15 @@ export default class extends Component {
         let {
             dateID = params.defaultDateID,
             total = params.defaultTotal,
-            type = params.defaultType,
+            typeList = params.defaultType,
+            getDetail,
         } = this.props;
 
         return {
             dateID,
             total,
-            type,
+            typeList,
+            getDetail,
         }
     }
     dateLable () {
@@ -82,11 +84,14 @@ export default class extends Component {
 
     pieChart () {
         let {
-            type,
+            dateID,
+            total,
+            typeList,
+            getDetail,
         } = this.getProps();
 
         let totalInDate = 0;
-        let SpentTypesList = type.slice();
+        let SpentTypesList = typeList.slice();
 
         let i = 0;
         while(i < SpentTypesList.length) {
@@ -99,8 +104,9 @@ export default class extends Component {
         }
 
         const isEmpty = SpentTypesList.length == 0;
+        
         const isDefault = ((SpentTypesList.length == 1)
-            &&(SpentTypesList[0].spenses.length === 0));
+            &&(SpentTypesList[0].spenseList.length === 0));
 
         const data = isEmpty || isDefault ? 
             undefined:
@@ -118,18 +124,26 @@ export default class extends Component {
             })
 
         return (
-            <PieChart 
-            data={data}/>
+            <TouchableOpacity
+                onPress= {() => {
+                    getDetail(
+                        dateID,
+                        typeList,
+                    )}}>
+                <PieChart 
+                    data={data}/>
+            </TouchableOpacity>
+            
         )
     }
 
     listType () {
         let {
-            type,
+            typeList,
         } = this.getProps();
         let localStyle = substyles.footer;
         
-        let SpentTypesList = type.slice();
+        let SpentTypesList = typeList.slice();
 
         let i = 0;
         while(i < SpentTypesList.length) {
@@ -146,12 +160,12 @@ export default class extends Component {
             <ScrollView 
                 contentContainerStyle={localStyle.scrollView}
                 horizontal={true}>
-                {type.map((e,i)=>{
+                {typeList.map((e,i)=>{
                     return (
                         // <Text >{e.name}</Text>
                         <SnipetType 
                             style= {localStyle.snipet}
-                            key = {e.name+e.total+i}
+                            key = {'SnipetType' + i}
                             name = {e.name}
                             total = {e.total}/>
                     )
@@ -191,6 +205,7 @@ export default class extends Component {
     render() {
         let {
         } = this.props;
+
 
         return (
             <View style={styles.container}>

@@ -34,6 +34,7 @@ export default class App extends Component {
 
     // console.log('insert test',JSON.stringify(await TestDoc.insertAsync({a: 300})));
     // console.log('get test',JSON.stringify(await TestDoc.findAsync({})));
+    // await AsyncStorage.removeItem("change");
     // await SpenseController.deleteAll();
     let today = new Date();
     console.log('get all spense',JSON.stringify(await SpenseController.getListByDate(

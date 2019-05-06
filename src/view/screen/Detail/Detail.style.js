@@ -35,22 +35,22 @@ export default StyleSheet.create({
 export const substyles = {
   header: {
     title: {
-      ...Typeface.header[4],
+      flex: 2,
+      ...Typeface.header[6],
       textAlignVertical: "center",
-      textAlign: "center"
+      textAlign: 'left'
     },
     backButton: {
-      ...Typeface.header[1],
-      textAlign: "center",
-      textAlignVertical: "center",
-      justifyContent: "center",
-      alignItems: "center"
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     deleteAllButton: {
-      ...Typeface.subtitle[1],
-      fontSize: 20,
+      flex: 1,
+      ...Typeface.button,
       color: Color.Red,
-      margin: 5
+      textAlignVertical: "center",
+      textAlign: 'left',
     }
   },
   body: {
@@ -61,14 +61,12 @@ export const substyles = {
       justifyContent: "space-between"
     },
     containerText: {
-      ...Typeface.subtitle[1],
+      ...Typeface.body[1],
       fontSize: 30
     },
     top: {
       dateLabel: {
-        ...Typeface.body[1],
-        fontSize: 30,
-        height: 40,
+        ...Typeface.overline,
         textAlign: "center",
         textAlignVertical: "center"
       }

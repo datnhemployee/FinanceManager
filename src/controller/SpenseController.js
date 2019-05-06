@@ -25,11 +25,11 @@ export default class SpenseController{
 
     static async getChange () {
         let result = await AsyncStorage.getItem("change");
-        if(result === 'undefined'){
+        if(!result){
             await AsyncStorage.setItem("change",''+0);
             return 0;
         }
-        return result;
+        return parseInt(result);
     }
 
     static async saveChange (price) {
@@ -513,6 +513,24 @@ export default class SpenseController{
         },{
             ...total
         });
+    }
+
+    static async getDailyList(month,year){
+        let date = new Date(year,month,1);
+
+        let monthID = gap({present: date}).month();
+        let yearID = gap({present: date}).year();
+
+        let total = await totalDoc.findOneAsync({
+            Id: yearID,
+        });
+        // console.log('total',JSON.stringify(total))
+        if(!total) return total;
+        
+        let monthly_index = total.monthlyList.findIndex((val)=>val.Id==monthID);
+        if(monthly_index == -1) return null;
+
+        return total.monthlyList[monthly_index].dailyList;
     }
 
     static async getDailyTotal(day,month,year){
