@@ -54,6 +54,8 @@ const NameList = {
     picture: 'picture-o',
 
     send: 'send-o',
+
+    selected_color : 'check-circle-outline',
 }
 
 const untapColor = Color.Gray;

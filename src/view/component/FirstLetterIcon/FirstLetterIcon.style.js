@@ -3,11 +3,8 @@ import Color from '../../../styles/Color'
 
 export default style = StyleSheet.create({
     body: {
-        width: 50,
-        height: 50,
-        borderRadius: 50,
         textAlign: 'center',
-        textAlignVertical: 'top',
+        textAlignVertical: 'center',
         includeFontPadding: false,
         paddingTop: 10,
         color: Color.Black,
