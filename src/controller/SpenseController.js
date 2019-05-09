@@ -19,6 +19,10 @@ let totalDoc = new Datastore({
     autoload: true,
 })
 
+let pageDoc = new Datastore({
+  filename: "Page",
+  autoload: true
+});
 
 export default class SpenseController{
     constructor () {}
@@ -91,8 +95,8 @@ export default class SpenseController{
 
         spense = await spenseDoc.insertAsync(spense);
         console.log('spense');
-
-        return await SpenseController.insert_total(spense,true);
+    await SpenseController.insert_total(spense, true);
+    return await SpenseController.insert_page(spense, true);
     }
 
     static async insert_total(spense, isChecked = false) {
@@ -299,6 +303,46 @@ export default class SpenseController{
         return result;
     }
     
+  static get pageMax() {
+    return 0;
+  }
+  static async insert_page(spense, isChecked = false) {
+    if (!isChecked) {
+      let checkResult = SpenseController.check(spense);
+      if (!checkResult) return null;
+    }
+    let page = await pageDoc.findOneAsync({
+      pageIndex: pageMax
+    });
+    if (!page) {
+      page = Page.default();
+    }
+    console.log("found Page (null if cannot find)", JSON.stringify(page));
+    let specifiedDay_Index = page.dayList.findIndex(
+      val => val.Id == spense.dayId
+    );
+    if (specifiedDay_Index == -1) {
+      if (page.amount >= 5) {
+        page = Page.default();
+        page.pageIndex = ++pageMax;
+      }
+      page.amount++;
+    } else {
+      let specifiedDay = page.dayList[specifiedDay_Index];
+      page.dayList = page.dayList.filter(e => e.Id != specifiedDay.Id);
+    }
+    let { day, month, year } = getDateFromID(spense.dayID);
+    let dayList = await SpenseController.getDailyTotal(day, month, year);
+    page.dayList.push({ dayList });
+    console.log("updated page", JSON.stringify(page));
+    await pageDoc.removeAsync({
+      pageIndex: page.pageIndex
+    });
+    console.log("remove page", JSON.stringify(page));
+    result = await pageDoc.insertAsync(page);
+    console.log("updated page", JSON.stringify(page));
+    return result;
+  }
     static async getListByDate(
         day = new Date().getDate(),
         month = new Date().getMonth(), 
