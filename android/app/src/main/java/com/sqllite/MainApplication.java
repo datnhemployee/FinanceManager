@@ -14,7 +14,6 @@ import com.facebook.soloader.SoLoader;
 
 import java.util.Arrays;
 import java.util.List;
-import org.pgsqlite.SQLitePluginPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -28,7 +27,6 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-        new SQLitePluginPackage(),
         new MainReactPackage(),
             new SvgPackage(),
             new RNGestureHandlerPackage(),
