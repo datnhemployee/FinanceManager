@@ -7,10 +7,11 @@ import {
     TouchableOpacity,
     Modal,
     KeyboardAvoidingView,
+    FlatList,
 } from 'react-native';
 import styles, { substyles } from './Home.style';
 import params from './Home.default';
-import { format } from '../../../utils/DateConvert';
+import { format, getDatesFromID } from '../../../utils/DateConvert';
 import Type from '../../../model/Type';
 import FirstLetterIcon from '../../component/FirstLetterIcon/FirstLetterIcon';
 import Typeface from '../../../styles/Font';
@@ -20,19 +21,34 @@ import Note from '../Note/Note';
 import Total from '../../../model/Total';
 import Card from '../../component/Card/Card';
 import SpenseController from '../../../controller/SpenseController';
+import Detail from '../Detail/Detail';
+import Navigation from '../../../constant/Navigation';
 
 export default class extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            isNavigatedToNote: false,
+            navigation: Navigation.home,
             change: 0,
-            totalList: [],
+            currentDailyList: [],
+            month: new Date(),
+            detailedTotal: Total.default().monthlyList[0].dailyList[0].typeList,
+            detailedDate: new Date(),
         }
 
-        this.navigate = this.navigate.bind(this);
-        this.backButtonOnClick = this.backButtonOnClick.bind(this);
+        this.Note_backButtonOnClick = this.Note_backButtonOnClick.bind(this);
+        this.navigateToNote = this.navigateToNote.bind(this);
         this.cancelButtonOnClick = this.cancelButtonOnClick.bind(this);
+        this.getDetail = this.getDetail.bind(this);
+        this.onEndReached = this.onEndReached.bind(this);
+        this.onRefresh = this.onRefresh.bind(this);
+    }
+
+    async onRefresh() {
+        await this.onEndReached();
+    }
+    async onEndReached() {
+
     }
 
     async componentDidMount () {
@@ -51,20 +67,14 @@ export default class extends Component {
         console.log('temp',JSON.stringify(temp))
 
         if(!temp[0])
-            this.setState({totalList: [Total.default()]});
+            this.setState({currentDailyList: Total.default().monthlyList[0].dailyList});
         else 
-            this.setState({totalList: temp});
-        console.log('totalList',JSON.stringify(this.state.totalList))
+            this.setState({currentDailyList: temp});
+        console.log('totalList',JSON.stringify(this.state.currentDailyList))
     }
 
     cancelButtonOnClick () {
-        this.navigate();
-    }
-
-    navigate () {
-        let temp = !this.state.isNavigatedToNote;
-
-        this.setState({isNavigatedToNote: temp});
+        this.setState({navigation: Navigation.home});
     }
 
     getProps () {
@@ -75,17 +85,26 @@ export default class extends Component {
         }
     }
 
-    async backButtonOnClick (price) {
-        this.navigate();
+    async Note_backButtonOnClick (price) {
+        if(!price) price = 0;
+        let changeFromDB = await SpenseController.getChange();
+        await SpenseController.saveChange(changeFromDB + price);
 
-        await SpenseController.saveChange(price);
+        this.setState({
+            navigation: Navigation.home,
+            change: changeFromDB + price,
+        })
+    }
+
+    navigateToNote() {
+        this.setState({navigation: Navigation.note});
     }
 
     navigateNoteButton () {
         return (
             <TouchableOpacity 
                 style={substyles.footer.navigateButton}
-                onPress={this.navigate}
+                onPress={this.navigateToNote}
                 >
                 <Text 
                     style={substyles.footer.navigateButtonText}>
@@ -145,24 +164,25 @@ export default class extends Component {
         let {
         } = this.getProps();
 
-        console.log(JSON.stringify(this.state.totalList))
         return (
-            <ScrollView 
-                on
-                style={styles.body}
-                showsVerticalScrollIndicator={false}>
-                {this.state.totalList.map((val)=> {
-                    console.log(JSON.stringify(val))
-                    return (
-                    <Card 
-                        // style={{flex: 1}}
-                        key = {val.Id + val.total}
-                        dayID = {val.Id}
-                        total = {val.total}
-                        types = {val.typeList}
-                    />)}
-                )}
-            </ScrollView>
+            <FlatList 
+            style={styles.body}
+            showsVerticalScrollIndicator={false}
+            data={this.state.currentDailyList}
+            renderItem={({Id,total,typeList}) => (
+                <Card 
+                    // style={{flex: 1}}
+                    key = {Id + total}
+                    dayID = {Id}
+                    total = {total}
+                    typeList = {typeList}
+                    getDetail = {this.getDetail}
+                />
+            )}
+            onEndReached={this.onEndReached}
+            onEndReachedThreshold={0.5}
+            onRefresh={this.onRefresh}
+            keyExtractor={(item,index) => 'SpenseInDate'+index}/>
         );
     }
 
@@ -177,10 +197,41 @@ export default class extends Component {
     note () {
         return (
             <Note 
-                isNavigatedToNote= {this.state.isNavigatedToNote}
-                backButtonOnClick = {this.backButtonOnClick}
-                cancelButtonOnClick = {this.cancelButtonOnClick}/>
+                isNavigatedToNote= {this.state.navigation === Navigation.note}
+                backButtonOnClick = {this.Note_backButtonOnClick}
+                />
         )
+    }
+
+    detail () {
+        let {
+        } = this.getProps();
+        // console.log('Home detailedTotal', JSON.stringify(this.state.detailedTotal.typeList));
+        return (
+            <Detail
+                detailedList= {this.state.detailedTotal}
+                detailedDate = {this.state.detailedDate}
+                isNavigatedToDetail = {this.state.navigation === Navigation.detail}
+                navigateToNote = {this.navigateToNote}
+                backButtonOnClick = {this.Note_backButtonOnClick}
+            />
+        )
+    }
+
+    getDetail(
+        dateID,
+        total,
+    ) {
+        
+
+        let date = getDatesFromID(dateID);
+        let dateToDetail = new Date(date.year,date.month,date.day);
+
+        this.setState({
+            detailedTotal: total,
+            detailedDate: dateToDetail,
+            navigation: Navigation.detail,
+        })
     }
 
     render() {
@@ -189,10 +240,11 @@ export default class extends Component {
             style={styles.container}
             // behavior='padding'
             >
+                {this.detail()}
                 {this.note()}
                 <Modal 
                     transparent={false}
-                    visible={!this.state.isNavigatedToNote}
+                    visible = {this.state.navigation === Navigation.home}
                     animationType="slide">
                     <View style={styles.container}>
                         {this.header()}

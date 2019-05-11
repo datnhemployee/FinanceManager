@@ -18,12 +18,23 @@ import { ScrollView } from "react-native-gesture-handler";
 import Note from "../Note/Note";
 import Total from "../../../model/Total";
 import Card from "../../component/Card/Card";
+import SpenseController from "../../../controller/SpenseController";
 
 export default class extends Component {
   constructor(props) {
     super(props);
     this.state = {};
     this.navigate = this.navigate.bind(this);
+    this.getListByDate = this.getListByDate.bind(this);
+  }
+  getListByDate() {
+    let { dateLabel, detailList } = this.getProps();
+    detailList = SpenseController.getListByDate(
+      dateLabel.getDate(),
+      dateLabel.getMonth() + 1,
+      dateLabel.getFullYear()
+    );
+    console.log(detailList);
   }
   navigate() {
     ///Bug: code điều hướng trang khi nhấn "Thêm thu chi"
@@ -31,31 +42,37 @@ export default class extends Component {
 
   getProps() {
     let {
-      dateLabel = [params.dateLableText],
-      detailList = [...[], ...params.detailList],
+      detailedList= [],
+      detailedDate =  new Date(),
       backButtonOnClick = () => {
-        console.log(`Vừa nhấn trở lại`);
+        console.log(`Clicked back button`);
       },
       deleteAllButtonOnClick = () => {
         console.log(`Vừa nhấn Xóa Tất cả`);
-      }
-
+      },
+      navigateToNote = () => {
+        console.log(`Vừa nhấn Thêm chi tiêu`);
+      },
       // list = [params.defaultText]
       //   detailList = [params.detailList]
     } = this.props;
     return {
-      dateLabel,
-      detailList,
+      detailedDate,
+      detailedList,
+      navigateToNote,
       backButtonOnClick,
       deleteAllButtonOnClick
     };
   }
 
   navigateNoteButton() {
+    let {
+      navigateToNote
+    } = this.getProps();
     return (
       <TouchableOpacity
         style={substyles.footer.navigateButton}
-        onPress={this.navigate}
+        onPress={navigateToNote}
       >
         <Text style={substyles.footer.navigateButtonText}>
           {params.btnAddText}
@@ -84,7 +101,7 @@ export default class extends Component {
     return (
       <TouchableOpacity
         style={substyles.header.backButton}
-        onPress={backButtonOnClick}
+        onPress={() => {backButtonOnClick()}}
       >
         {params.backButtonIcon}
       </TouchableOpacity>
@@ -92,9 +109,18 @@ export default class extends Component {
   }
 
   dateLable() {
-    let { dateLabel } = this.getProps();
-    return <Text style={substyles.body.top.dateLabel}>{dateLabel}</Text>;
+    let { detailedDate } = this.getProps();
+    return (<Text style={substyles.body.top.dateLabel}>
+      { 
+        Typeface.toCase(format({
+          day: detailedDate.getDate(),
+          month: detailedDate.getMonth(),
+          month: detailedDate.getFullYear(),}),
+          Typeface.type.overline)
+      }
+      </Text>);
   }
+
   detailElement(expenseName, amount, index) {
     return (
       <View style={substyles.body.container} key={index}>
@@ -105,11 +131,11 @@ export default class extends Component {
   }
 
   detailList() {
-    let { detailList } = this.getProps();
+    let { detailedList } = this.getProps();
     return (
       <View>
-        {detailList.map((element, index) => {
-          return this.detailElement(element.expenseName, element.amount, index);
+        {detailedList.map((element, index) => {
+          return this.detailElement(element.name, element.price, index);
         })}
       </View>
     );
@@ -158,7 +184,7 @@ export default class extends Component {
   }
 
   render() {
-    let { isNavigatedToDetail } = this.getProps;
+    let { isNavigatedToDetail } = this.getProps();
     return (
       <Modal
         transparent={false}

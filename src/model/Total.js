@@ -13,9 +13,7 @@ export default class Total {
                 {
                     Id: 0,
                     total: 0,
-                    spenseList: [{
-
-                    }]
+                    spenseList: []
                 }
             ],
             monthlyList: [
@@ -26,9 +24,7 @@ export default class Total {
                         {
                             Id: 0,
                             total: 0,
-                            spenseList: [{
-
-                            }]
+                            spenseList: []
                         }
                     ],
                     dailyList: [
@@ -39,9 +35,7 @@ export default class Total {
                                 {
                                     Id: 0,
                                     total: 0,
-                                    spenseList: [{
-                                        
-                                    }]
+                                    spenseList: []
                                 }
                             ]
                         }

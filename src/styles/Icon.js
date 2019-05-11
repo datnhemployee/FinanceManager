@@ -58,7 +58,7 @@ const NameList = {
     selected_color : 'check-circle-outline',
 }
 
-const untapColor = Color.Navigation.untapped;
+const untapColor = Color.Gray;
 
 export default {
     User: ({

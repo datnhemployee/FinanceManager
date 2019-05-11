@@ -1,9 +1,4 @@
-import {
-    enablePromise,
-    DEBUG,
-    openDatabase,
-    deleteDatabase,
-} from "react-native-sqlite-storage";
+
 
 export default class Connection{
     constructor () {

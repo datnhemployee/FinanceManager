@@ -9,7 +9,7 @@ export default {
         {
             ...Type.default(),
             total: 0,
-            spenses: [{
+            spenseList: [{
 
             }]
         },

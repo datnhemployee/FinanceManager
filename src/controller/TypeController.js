@@ -7,6 +7,30 @@ let typeDoc = new Datastore({
 })
 
 export default class TypeController {
+
+    static async check (type) {
+        if (type) {
+            let typeFromDB = await typeDoc.findOneAsync({
+                $or: [
+                    {
+                        name: {$regex: `^[^${type.name[0]}]`},
+                        color: type.color,
+                    },
+                    { 
+                        name: type.name,
+                        color: type.color,
+                    }
+                ]},
+            );
+            if (typeFromDB)
+                return false;
+
+            return true;
+        } 
+        return false;
+
+    }
+
     static async isIncome(typeID) {
         let result = await typeDoc.findOneAsync({
             _id: typeID,
@@ -48,5 +72,9 @@ export default class TypeController {
             ...Type.default(),
         });
         return result;
+    }
+
+    static async getAll () {
+        return await typeDoc.findAsync({});
     }
 }

@@ -93,6 +93,8 @@ export default class extends Component {
             backButtonOnClick,
         } = this.getProps();
 
+        console.log('đây nè: '+ this.state.spense.name);
+        console.log('đây nè: '+ this.state.spense.price);
         let isAvailable_name = !!this.state.spense.name || this.state.spense.name != '';
         let isAvailable_price = !!this.state.spense.price || this.state.spense.price != 0;
 
@@ -102,19 +104,20 @@ export default class extends Component {
             await backButtonOnClick();
             return;
         }
-        let isIncome = TypeController.isIncome(0);
+        let isIncome = await TypeController.isIncome(0);
         if(!isIncome){
             isIncome = false;
         }
+        let priceToSave = Math.abs(parseInt(this.state.spense.price)) * (isIncome?1:-1);
 
         await SpenseController.insert({
             ...this.state.spense,
             ...{
-                price: Math.abs(parseInt(this.state.spense.price)) * (isIncome?+1:-1),
+                price: priceToSave,
                 dayID: gap().day(),
             }
         })
-        await backButtonOnClick();
+        await backButtonOnClick(priceToSave);
         ToastAndroid.show('Lưu dữ liệu thành công.', ToastAndroid.LONG)
     }
 
