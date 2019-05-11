@@ -27,7 +27,7 @@ export default StyleSheet.create({
     },
     body:{
         // flex: 8,
-        height: 5 * height / 10,
+        height: 7.5 * height / 10,
         // borderWidth: 1,
     },
     footer:{

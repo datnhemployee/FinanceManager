@@ -1,80 +1,51 @@
-import Datastore from "react-native-local-mongodb";
-import Type from "../model/Type";
+import Codes from "../constant/Codes";
+import TypeRepository from "../repository/TypeRepository";
 
-let typeDoc = new Datastore({
-    filename: 'Type',
-    autoload: true,
-})
 
-export default class TypeController {
+export default class SpenseController {
 
-    static async check (type) {
-        if (type) {
-            let typeFromDB = await typeDoc.findOneAsync({
-                $or: [
-                    {
-                        name: {$regex: `^[^${type.name[0]}]`},
-                        color: type.color,
-                    },
-                    { 
-                        name: type.name,
-                        color: type.color,
-                    }
-                ]},
-            );
-            if (typeFromDB)
-                return false;
-
-            return true;
-        } 
-        return false;
-
-    }
-
-    static async isIncome(typeID) {
-        let result = await typeDoc.findOneAsync({
-            _id: typeID,
-        });
-        if(!result) return null;
-        return result.isIncome;
-    }
 
     static async insert (type) {
-        if(!type) return null;
+        let constraint = !type ? 
+        `Loại chi tiêu không đầy đủ thông tin.`: 
+        !type.name ?
+        `Chưa nhập tên loại chi tiêu.`:
+        type.length < 4 ?
+        `Tên loại chi tiêu phải trên 4 kí tự.`:
+        undefined;
+        
+        if(!constraint){
+            let result = {
+            code: Codes.None,
+            }
+            let insertResult = await TypeRepository.insert(type);
+            if (insertResult.code === Codes.Exception)
+            return insertResult;
 
-        let result = await typeDoc.insertAsync({
-            ...type,
-        });
-        return result;
-    }
+            return {
+            code: Codes.Success,
+            content: insertResult,
+            }
+        }
+        return {
+            code: Codes.Exception,
+            content: constraint,
+        }
+  }
 
-    static async insert (type) {
-        if(!type) return null;
+  static async update (id,update) {
+    
+      return {
+        code: Codes.Failed,
+        content: `Không thể xóa mã chi tiêu vì sẽ gây ra lỗi.`,
+      }
+  }
 
-        let result = await typeDoc.updateAsync({
-            _id: type._id,
-        });
-        return result;
-    }
-
-    static async delete (type) {
-        if(!type) return null;
-
-        let result = await typeDoc.removeAsync({
-            _id: type._id,
-        });
-        return result;
-    }
-
-    static async seed () {
-
-        let result = await typeDoc.insertAsync({
-            ...Type.default(),
-        });
-        return result;
-    }
-
-    static async getAll () {
-        return await typeDoc.findAsync({});
-    }
+  static async remove (id) {
+    
+      return {
+        code: Codes.Failed,
+        content: `Không thể xóa mã chi tiêu vì sẽ gây ra lỗi.`,
+      }
+  }
 }

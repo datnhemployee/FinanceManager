@@ -1,20 +1,18 @@
 import { AsyncStorage } from "react-native";
-import Type from "./Type";
 import ConstantValue from "../constant/ConstantValue";
-import Color from "../styles/Color";
-import { gap } from "../utils/DateConvert";
+import { getID } from "../utils/DateConvert";
 
 const INIT_NUMBER = ConstantValue.INIT_NUMBER;
 export default class Spense{
     constructor () {}
 
-    static async default () {
+    static async default (dayID = getID().day()) {
         return {
-            name: `Không tên`,
-            description: `Không`,
-            typeID : INIT_NUMBER,
+            name: ``,
+            description: ``,
+            type : ``,
             price : 0,
-            dayID : gap().day(),
+            dayID : dayID,
         }
     }
 

@@ -5,14 +5,16 @@ import {
 import Typeface, { Font,  } from '../../../styles/Font';
 import Color from '../../../../old/src/styles/Color';
 
-let height = Dimensions.get("window").height;
+let {height} = Dimensions.get("window");
 height = height - 30;
+
 console.log(height);
 
 export default StyleSheet.create({
     container: {
         padding: 10,
         height: height,
+        // borderWidth: 10,
     },
     header: {
         flexDirection: 'row',
@@ -21,7 +23,7 @@ export default StyleSheet.create({
         height: 1 * height / 10,
     },
     body: {
-        height: 5 * height / 10,
+        height: 8 * height / 10,
     },
     footer: {
         height: 1 * height / 10,

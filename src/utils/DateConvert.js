@@ -19,10 +19,10 @@ export const format = ({
     return DateType[country];
 }
 
-export const gap = ({
+export const getID = (
     present = new Date(), 
     previous = new Date(2019,3,5),
-} = {}) => {
+) => {
     if(!present 
         || present === null
         || previous === null) {
