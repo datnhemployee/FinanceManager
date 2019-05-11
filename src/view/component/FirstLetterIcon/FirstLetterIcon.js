@@ -21,7 +21,7 @@ export default class extends Component {
     getProps () {
         let {
             firstLetter = '\+',
-            color,
+            color = Color.Blue,
             fontSize = 30,
             size = {width : 50, height : 50, borderRadius : 50},
         } = this.props;
