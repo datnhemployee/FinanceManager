@@ -15,30 +15,51 @@ const SpenseDatastore = new Datastore({
 
 export default class SpenseRepository {
 
+    static async removeByDate(dayID) {
+        await SpenseDatastore.removeAsync({dayID: dayID},{multi: true});
+        return {
+            code: Codes.Success,
+            content: await DayDatastore.removeAsync({dayID: dayID},{multi: true}),
+        }
+    }
     static async get (id) {
         return {
             code: Codes.Success,
             content: await SpenseDatastore.findOneAsync({_id: id}),
         }
     }
-    static async getPage (pageIndex = 1) {
+    static async getAll () {
+        return await SpenseDatastore.getAllData();
+    }
+    static async getAllDay () {
+        return await DayDatastore.getAllData();
+    }
+    static async deleteAll () {
+        console.log("remove day",await DayDatastore.removeAsync({dayID: 37}))
+        console.log("remove spense",await SpenseDatastore.removeAsync({dayID: 37}));
+    }
+    static getPage (pageIndex = 1,callback) {
+        let result = {
+            code: Codes.None,
+            content: 'Không có dữ liệu'
+        }
         DayDatastore.find({})
-            .skip((pageIndex-1) * 5)
-            .limit(5).sort({dayID: 1})
-            .exec((err,result)=> {
+            // .skip((pageIndex-1) * 5)
+            // .limit(5).sort({dayID: 1})
+            .exec((err,rs)=> {
                 if (err){
-                    result = {
+                    callback({
                         code: Codes.Exception,
                         content: `Không thể lấy dữ liệu.`,
-                    }
+                    });
                     return;
                 }
-                result = {
+                callback({
                     code: Codes.Success,
-                    content: result,
-                }
+                    content: rs,
+                })
             });
-        return result;
+        
     }
 
     static async insert (spense) { 
@@ -51,9 +72,14 @@ export default class SpenseRepository {
             }
         }
 
-        return await SpenseRepository
+        console.log('before dayList',JSON.stringify(spense));
+
+        let result = await SpenseRepository
             .PRIVATE
             .DayRepository.insertSpense(spense);
+
+        console.log(JSON.stringify(result));
+        return result;
         
     }
 
@@ -110,9 +136,12 @@ export default class SpenseRepository {
                     let day = await DayDatastore.findOneAsync({
                         dayID: spense.dayID,
                     });
+
                     if(!day) {
                         day = Day.default(spense.dayID);
                     }
+                    console.log('day in dayList',JSON.stringify(day));
+
                     day.total = spense.price + day.total;
             
                     let typeIndex = day.typeList.findIndex((val)=> val.name === spense.type);
@@ -135,22 +164,23 @@ export default class SpenseRepository {
                         });
                     }
 
-                    let docAffected = await DayDatastore.removeAsync({
+                    console.log('day in dayList after typeList',JSON.stringify(day));
+
+                    let affected = await DayDatastore.removeAsync({
                         dayID: spense.dayID,
                     });
-                    if(docAffected == 0)
-                        return {
-                            code: Codes.Exception,
-                            content: `Tổng kết chi tiêu tồn tại nhưng không thể cập nhật.`
-                        }
+                    console.log('affected in dayList after remove',JSON.stringify(affected));
                     
-                    let dayFromDB = await DayDatastore.insertAsync(spense);
+                    
+                    let dayFromDB = await DayDatastore.insertAsync(day);
                     if(!!dayFromDB){
                         return {
                             code: Codes.Success,
                             content: dayFromDB,
                         }
                     }
+                    console.log('day in dayList after inset ',JSON.stringify(await DayDatastore.findAsync({})));
+
                     return {
                         code: Codes.Exception,
                         content: `Lỗi hệ thống: không thể cập nhật tổng kết chi tiêu.`

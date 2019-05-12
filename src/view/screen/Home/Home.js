@@ -8,73 +8,141 @@ import {
     Modal,
     KeyboardAvoidingView,
     FlatList,
+    ToastAndroid,
+    AsyncStorage,
 } from 'react-native';
 import styles, { substyles } from './Home.style';
 import params from './Home.default';
-import { format, getDatesFromID } from '../../../utils/DateConvert';
-import Type from '../../../model/Type';
-import FirstLetterIcon from '../../component/FirstLetterIcon/FirstLetterIcon';
 import Typeface from '../../../styles/Font';
-import Color from '../../../styles/Color';
-import { ScrollView } from 'react-native-gesture-handler';
 import Note from '../Note/Note';
-import Total from '../../../model/Total';
 import Card from '../../component/Card/Card';
 import SpenseController from '../../../controller/SpenseController';
 import Detail from '../Detail/Detail';
 import Navigation from '../../../constant/Navigation';
+import ConstantRepository from '../../../repository/ConstantRepository';
+import Day from '../../../model/Day';
+import Codes from '../../../constant/Codes';
 
 export default class extends Component {
     constructor (props) {
         super(props);
         this.state = {
             navigation: Navigation.home,
-            change: 0,
-            currentDailyList: [],
-            month: new Date(),
-            detailedTotal: Total.default().monthlyList[0].dailyList[0].typeList,
-            detailedDate: new Date(),
+            wallet: 0,
+            dayList: [],
+            detailedDate: Day.default(),
+            currentPage: 1,
+            refreshing: false,
         }
 
-        this.Note_backButtonOnClick = this.Note_backButtonOnClick.bind(this);
+
+        this.backButtonOnClick = this.backButtonOnClick.bind(this);
         this.navigateToNote = this.navigateToNote.bind(this);
-        this.cancelButtonOnClick = this.cancelButtonOnClick.bind(this);
-        this.getDetail = this.getDetail.bind(this);
+        this.onCardClick = this.onCardClick.bind(this);
         this.onEndReached = this.onEndReached.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
+        this.deleteAllButtonOnClick = this.deleteAllButtonOnClick.bind(this);
+    }
+
+    async deleteAllButtonOnClick (dayID,total) {
+        let walletFromDB = await ConstantRepository.getWallet();
+        console.log('deleteAllButtonOnClick',JSON.stringify(walletFromDB))
+        console.log('deleteAllButtonOnClick',JSON.stringify(walletFromDB.content - total))
+        await SpenseController.removeByDate(dayID);
+        await ConstantRepository.setWallet(walletFromDB.content - total);
+        walletFromDB = await ConstantRepository.getWallet();
+
+        console.log('deleteAllButtonOnClick',JSON.stringify(walletFromDB))
+        this.setState({
+            dayList: this.state.dayList.filter((val)=> val.dayID != dayID),
+            navigation: Navigation.home,
+            wallet: walletFromDB.content,
+        })
     }
 
     async onRefresh() {
+        console.log('onrefresh');
         await this.onEndReached();
     }
-    async onEndReached() {
 
+    async onEndReached() {
+        console.log('onEndReach');
+        let {
+            code: codeGetMaxPage,
+            content: contentGetMaxPage
+        } = await ConstantRepository.getMaxPage();
+        console.log('maxPage',contentGetMaxPage)
+
+        if(codeGetMaxPage != Codes.Success){
+            ToastAndroid.show(
+                contentGetMaxPage,
+                ToastAndroid.LONG,
+            );
+            return;
+        }
+        let currentPage = this.state.currentPage;
+        console.log('currentPage',currentPage)
+
+        if (currentPage + 1 > contentGetMaxPage) {
+            ToastAndroid.show(
+                `Đã lấy hết tổng kết chi tiêu trong dữ liệu.`,
+                ToastAndroid.LONG,
+            );
+            
+            return;
+        }
+        await this.updateDayList(currentPage + 1);
+        
+    }
+
+    async updateDayList (page,dayID) {
+        console.log('updateDayList');
+        SpenseController.getPage(page,(res)=>{
+            console.log('result out',JSON.stringify(res))
+
+            if(res.code === Codes.Success){
+
+                if(!!dayID)
+                    this.state.dayList = this.state.dayList.filter((val)=>val.dayID != dayID)
+                this.setState({
+                    dayList: [...this.state.dayList,...res.content],
+                    currentPage: page,
+                    refreshing: true,
+                });
+                this.setState({
+                    refreshing: false,
+                })
+                return;
+            } 
+    
+            ToastAndroid.show(
+                res.content,
+                ToastAndroid.LONG,
+            );
+        });
+
+        
     }
 
     async componentDidMount () {
+        console.log('updateDayList');
 
-        this.setState({change: await SpenseController.getChange()});
-        // console.log('this.state.change',JSON.stringify(this.state))
+        let wallet = await ConstantRepository.getWallet();
+        console.log('wallet didMount',JSON.stringify(wallet));
 
-        let today = new Date();
-        let temp = [
-            await SpenseController.getDailyTotal(
-                today.getDate(),
-                today.getMonth(),
-                today.getFullYear(),
-            ),
-        ];
-        console.log('temp',JSON.stringify(temp))
+        if(wallet.code != Codes.Success){
+            ToastAndroid.show(
+                wallet.content,
+                ToastAndroid.LONG,
+            );
+            return;
+        }
+        let currentPage = this.state.currentPage;
 
-        if(!temp[0])
-            this.setState({currentDailyList: Total.default().monthlyList[0].dailyList});
-        else 
-            this.setState({currentDailyList: temp});
-        console.log('totalList',JSON.stringify(this.state.currentDailyList))
-    }
-
-    cancelButtonOnClick () {
-        this.setState({navigation: Navigation.home});
+        await this.updateDayList(currentPage);
+        this.setState({
+            wallet: wallet.content,
+        })
     }
 
     getProps () {
@@ -85,15 +153,32 @@ export default class extends Component {
         }
     }
 
-    async Note_backButtonOnClick (price) {
+    async backButtonOnClick (price,dayID) {
         if(!price) price = 0;
-        let changeFromDB = await SpenseController.getChange();
-        await SpenseController.saveChange(changeFromDB + price);
+
+        let walletFromDB = await ConstantRepository.getWallet();
+
+        if(walletFromDB.code != Codes.Success){
+            ToastAndroid.show(
+                walletFromDB.content,
+                ToastAndroid.LONG,
+            );
+            return;
+        }
+        walletFromDB = await ConstantRepository.setWallet(walletFromDB.content + price);
+        if(walletFromDB.code != Codes.Success){
+            ToastAndroid.show(
+                walletFromDB.content,
+                ToastAndroid.LONG,
+            );
+            return;
+        }
 
         this.setState({
             navigation: Navigation.home,
-            change: changeFromDB + price,
+            wallet: walletFromDB.content,
         })
+        await this.updateDayList(this.state.currentPage,dayID);
     }
 
     navigateToNote() {
@@ -134,7 +219,7 @@ export default class extends Component {
                 style={localStyles.change}>
                 {/* {params.changeTitle} */}
                 {Typeface.toCase({
-                    text: this.state.change + ' đ',
+                    text: this.state.wallet + ' đ',
                     type: Typeface.type.default,    
                 })} 
             </Text>
@@ -160,30 +245,46 @@ export default class extends Component {
         );
     }
 
-    body () {
-        let {
-        } = this.getProps();
-
+    listCard () {
+        let localStyles = substyles.body;
+        if (this.state.dayList.length === 0){
+            return (
+                <Text style={localStyles.cardDefaultList}>
+                    {params.defaultListCard}
+                </Text>
+            );
+        } 
         return (
             <FlatList 
             style={styles.body}
             showsVerticalScrollIndicator={false}
-            data={this.state.currentDailyList}
-            renderItem={({Id,total,typeList}) => (
+            data={this.state.dayList.length === 0?
+                    Day.default():
+                    this.state.dayList}
+            renderItem={({item}) => {
+                return (
                 <Card 
                     // style={{flex: 1}}
-                    key = {Id + total}
-                    dayID = {Id}
-                    total = {total}
-                    typeList = {typeList}
-                    getDetail = {this.getDetail}
+                    key = {item.dayID + item.total}
+                    dayID = {item.dayID}
+                    total = {item.total}
+                    typeList = {item.typeList}
+                    onClick = {this.onCardClick}
                 />
-            )}
+            )}}
             onEndReached={this.onEndReached}
             onEndReachedThreshold={0.5}
+            refreshing = {this.state.refreshing}
             onRefresh={this.onRefresh}
             keyExtractor={(item,index) => 'SpenseInDate'+index}/>
-        );
+        )
+    }
+
+    body () {
+        let {
+        } = this.getProps();
+
+        return this.listCard();
     }
 
     footer () {
@@ -198,8 +299,8 @@ export default class extends Component {
         return (
             <Note 
                 isNavigatedToNote= {this.state.navigation === Navigation.note}
-                backButtonOnClick = {this.Note_backButtonOnClick}
-                />
+                backButtonOnClick = {this.backButtonOnClick}
+            />
         )
     }
 
@@ -209,32 +310,27 @@ export default class extends Component {
         // console.log('Home detailedTotal', JSON.stringify(this.state.detailedTotal.typeList));
         return (
             <Detail
-                detailedList= {this.state.detailedTotal}
                 detailedDate = {this.state.detailedDate}
                 isNavigatedToDetail = {this.state.navigation === Navigation.detail}
                 navigateToNote = {this.navigateToNote}
-                backButtonOnClick = {this.Note_backButtonOnClick}
+                backButtonOnClick = {this.backButtonOnClick}
+                deleteAllButtonOnClick = {this.deleteAllButtonOnClick}
             />
         )
     }
 
-    getDetail(
-        dateID,
-        total,
+    onCardClick(
+        dateDetail
     ) {
-        
-
-        let date = getDatesFromID(dateID);
-        let dateToDetail = new Date(date.year,date.month,date.day);
 
         this.setState({
-            detailedTotal: total,
-            detailedDate: dateToDetail,
+            detailedDate: dateDetail,
             navigation: Navigation.detail,
         })
     }
 
     render() {
+
         return (
             <View 
             style={styles.container}
@@ -253,7 +349,6 @@ export default class extends Component {
                     </View>
                 </Modal>
             </View>
-
         )
     }
 }

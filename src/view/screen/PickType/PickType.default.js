@@ -1,5 +1,5 @@
 import Typeface from '../../../styles/Font';
-import Icon, { Size } from '../../../../old/src/styles/Icon';
+import Icon, { Size } from '../../../../src/styles/Icon';
 import Color from '../../../styles/Color';
 
 export default params = {

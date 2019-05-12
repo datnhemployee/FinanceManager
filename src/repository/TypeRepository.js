@@ -8,6 +8,17 @@ const TypeDatastore = new Datastore({
 })
 
 export default class TypeRepository {
+    
+    static async isIncome (name) {
+        let result = await TypeRepository.find(name);
+        if(result.code === Codes.Success){
+            return result.content.isIncome;
+        }
+        return {
+            code: Codes.Exception,
+        };
+    }
+
     static getAll () {
         return {
             code: Codes.Success,
@@ -44,8 +55,10 @@ export default class TypeRepository {
         let matchColorArray = await TypeDatastore.findAsync({
             color: type.color,
         });
-        let matchIndex = matchColorArray.findIndex((val)=> val.name[0]===type.name[0]);
+        console.log('check type',JSON.stringify(matchColorArray));
 
+        let matchIndex = matchColorArray.findIndex((val)=> val.name[0]===type.name[0]);
+        console.log('check type',matchIndex);
 
         return TypeRepository.find(name).code === Codes.Success ?
             `Không thể thêm chi tiêu cùng tên.`:
@@ -56,6 +69,7 @@ export default class TypeRepository {
 
     static async insert (type) {
         let constraint = await TypeRepository.check(type);
+        
         if(!constraint){
             return {
                 code: Codes.Success,

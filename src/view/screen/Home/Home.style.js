@@ -3,7 +3,7 @@ import {
     Dimensions,
 } from 'react-native';
 import Typeface from '../../../styles/Font';
-import Color from '../../../../old/src/styles/Color';
+import Color from '../../../../src/styles/Color';
 import ConstantValue from '../../../constant/ConstantValue';
 
 let {width, height} =Dimensions.get("window");
@@ -61,7 +61,13 @@ export const substyles = {
         },
     },
     body: {
-        
+        cardDefaultList : {
+            flex: 1,
+            ...Typeface.header[4],
+            color: Color.Gray,
+            textAlign: 'center',
+            textAlignVertical: "center",
+        }
     },
     footer: {
         navigateButton: {

@@ -1,7 +1,4 @@
-import { format } from '../../../utils/DateConvert';
-import Icon, { Size } from '../../../../old/src/styles/Icon';
 import Typeface from '../../../styles/Font';
-import Color from '../../../styles/Color';
 
 
 export default params = {
@@ -11,6 +8,10 @@ export default params = {
     }),
     navigateButtonText: Typeface.toCase({
         text: 'Thêm thu chi hôm nay',
+        type: Typeface.type.default,
+    }),
+    defaultListCard: Typeface.toCase({
+        text: 'Lịch sử thu chi rỗng',
         type: Typeface.type.default,
     }),
 }

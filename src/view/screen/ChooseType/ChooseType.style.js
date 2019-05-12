@@ -3,7 +3,7 @@ import {
     Dimensions,
 } from 'react-native';
 import Typeface, { Font,  } from '../../../styles/Font';
-import Color from '../../../../old/src/styles/Color';
+import Color from '../../../../src/styles/Color';
 
 let {height} = Dimensions.get("window");
 height = height - 30;

@@ -1,5 +1,5 @@
 import { format } from "../../../utils/DateConvert";
-import Icon, { Size } from "../../../../old/src/styles/Icon";
+import Icon, { Size } from "../../../../src/styles/Icon";
 import Typeface from "../../../styles/Font";
 import Color from "../../../styles/Color";
 ///Bug: Gọi hàm lấy ngày

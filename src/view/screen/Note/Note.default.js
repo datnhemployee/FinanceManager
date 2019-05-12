@@ -1,5 +1,5 @@
 import { format } from '../../../utils/DateConvert';
-import Icon, { Size } from '../../../../old/src/styles/Icon';
+import Icon, { Size } from '../../../../src/styles/Icon';
 import Typeface from '../../../styles/Font';
 import Color from '../../../styles/Color';
 
@@ -45,7 +45,6 @@ export default params = {
             type: Typeface.type.default,
         }),
     },
-    editIcon: Icon.Edit({}),
     income: Typeface.toCase({
         text: 'Thu',
         type: Typeface.type.default,

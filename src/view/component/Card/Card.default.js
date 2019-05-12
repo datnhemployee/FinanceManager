@@ -1,9 +1,9 @@
 import Typeface from "../../../styles/Font";
 import Type from "../../../model/Type";
-import { gap } from "../../../utils/DateConvert";
+import { getID } from "../../../utils/DateConvert";
 
 export default {
-    defaultDateID: gap().day(),
+    defaultDateID: getID().day(),
     defaultTotal: 0,
     defaultType: [
         {

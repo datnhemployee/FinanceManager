@@ -11,35 +11,39 @@ import {
 } from 'react-native';
 import styles, { substyles } from './Note.style';
 import params from './Note.default';
-import { format, gap } from '../../../utils/DateConvert';
-import Type from '../../../model/Type';
+import { format, getID } from '../../../utils/DateConvert';
 import FirstLetterIcon from '../../component/FirstLetterIcon/FirstLetterIcon';
 import Typeface from '../../../styles/Font';
 import Color from '../../../styles/Color';
 import { ScrollView } from 'react-native-gesture-handler';
-import Spense from '../../../model/Spense';
 import SpenseController from '../../../controller/SpenseController';
 import TypeController from '../../../controller/TypeController';
+import Navigation from '../../../constant/Navigation';
+import ChooseType from '../ChooseType/ChooseType';
+import Type from '../../../model/Type';
 
 export default class extends Component {
     constructor (props) {
         super(props);
         this.state = {
             spense: {
-                name: `Không tên`,
-                description: `Không`,
+                name: ``,
+                description: ``,
                 price : 0,
             },
             // isAvailable_name: false,
             // isAvailable_price: false,
             isIncome: false,
-            typeName: 'Không tên',
+            type: Type.default(),
+            navigation: Navigation.note,
         }
 
         this._backButtonOnClick = this._backButtonOnClick.bind(this);
         this._onChangeDescription = this._onChangeDescription.bind(this);
         this._onChangeName = this._onChangeName.bind(this);
         this._onChangePrice = this._onChangePrice.bind(this);
+        this._navigateToChooseType = this._navigateToChooseType.bind(this);
+        this.Type_backButtonOnClick = this.Type_backButtonOnClick.bind(this);
     }
 
     async componentDidMount ( ) {
@@ -52,11 +56,9 @@ export default class extends Component {
     }
 
     _onInputChange (text, key) {
-        let {
-            spense,
-        } = this.state;
+        
         this.setState({spense: {
-            ...spense,
+            ...this.state.spense,
             ...{
                 [key]: text,
             },
@@ -105,75 +107,37 @@ export default class extends Component {
             return;
         }
         let isIncome = await TypeController.isIncome(0);
+        let priceToSave = Math.abs(parseInt(this.state.spense.price));
         if(!isIncome){
-            isIncome = false;
+            priceToSave = priceToSave * -1;
         }
-        let priceToSave = Math.abs(parseInt(this.state.spense.price)) * (isIncome?1:-1);
 
-        await SpenseController.insert({
+        let dayIDToSave = getID().day();
+        
+        const spenseToDB = {
             ...this.state.spense,
             ...{
                 price: priceToSave,
-                dayID: gap().day(),
+                dayID: dayIDToSave,
             }
-        })
-        await backButtonOnClick(priceToSave);
+        }
+        console.log(JSON.stringify(spenseToDB))
+
+        await SpenseController.insert(spenseToDB);
+        await backButtonOnClick(priceToSave,dayIDToSave);
         ToastAndroid.show('Lưu dữ liệu thành công.', ToastAndroid.LONG)
     }
 
     getProps () {
         let {
             isNavigatedToNote = false,
-            // type = Type.default(),
             backButtonOnClick = () => {console.log(`Vừa nhấn trở lại`)},
-            // cancelButtonOnClick = () => {console.log(`Vừa nhấn hủy`)},
-            editButtonOnClick = () => {console.log(`Vừa nhấn sửa loại`)},
-            // saveButtonOnClick = () => {console.log(`Vừa nhấn lưu`)},
         } = this.props;
         return {
             isNavigatedToNote,
-            // type,
             backButtonOnClick,
-            // cancelButtonOnClick,
-            editButtonOnClick,
-            // saveButtonOnClick,
         }
     }
-
-    // saveButton() {
-    //     let {
-    //         saveButtonOnClick,
-    //     } = this.getProps();
-    //     let localStyles = substyles.footer;
-    //     return (
-    //         <TouchableOpacity
-    //             style={localStyles.saveButton}
-    //             onPress={saveButtonOnClick}>
-    //             <Text 
-    //             style={localStyles.saveButtonText}
-    //             > 
-    //             {params.saveButtonText}
-    //             </Text>
-    //         </TouchableOpacity>
-    //         );
-    // }
-
-    // cancelButton () {
-    //     let {
-    //         cancelButtonOnClick,
-    //     } = this.getProps();
-    //     let localStyles = substyles.header.right;
-    //     return (
-    //         <TouchableOpacity 
-    //             style={localStyles.cancelButton}
-    //             onPress={cancelButtonOnClick}>
-    //             <Text 
-    //                 style={localStyles.cancelText}>
-    //                 {params.cancelText}
-    //             </Text>
-    //         </TouchableOpacity>
-    //     )
-    // }
 
     dateLable () {
         let localStyles = substyles.body.top;
@@ -194,20 +158,6 @@ export default class extends Component {
         )
     }
 
-    editIcon () { 
-        let {
-            editButtonOnClick,
-        } = this.getProps();
-        const localStyles = substyles.body.mid.typeInput.top;
-        return (
-            <TouchableOpacity 
-                onPress={editButtonOnClick}
-                style={localStyles.editIcon} >
-                {params.editIcon}
-            </TouchableOpacity>
-        )
-    }
-
     typeName () {
         let {
             // type,
@@ -216,7 +166,7 @@ export default class extends Component {
         return (
             <Text style={localStyles.typeName} >
                 {Typeface.toCase({
-                    text: this.state.typeName,
+                    text: this.state.type.name,
                     type: Typeface.type.default,
                 })}
             </Text>
@@ -252,6 +202,11 @@ export default class extends Component {
         )
     }
 
+    _navigateToChooseType () {
+        console.log('qua màn hình chooseType',this.state.navigation);
+        this.setState({navigation: Navigation.chooseType})
+    }
+
     inputType () {
         let {
             // type,
@@ -261,25 +216,24 @@ export default class extends Component {
             <View style={localStyles.container} >
                 <View style={localStyles.top.container} >
                     {this.typeLabel()}
-                    {this.editIcon()}
                 </View>
-
-                <View style={localStyles.mid.container} >
+                <TouchableOpacity 
+                    style={localStyles.mid.container}
+                    onPress={this._navigateToChooseType}>
                     <FirstLetterIcon 
                         style={localStyles.mid.icon}
-                        firstLetter={this.state.typeName === 'Không tên' ? 
+                        firstLetter={!this.state.type.name ? 
                             undefined:
-                            this.state.typeName[0]
+                            this.state.type[0]
                         }
+                        color={this.state.type.color}
                     />
 
                     <View style={localStyles.mid.detail.container} >
                         {this.typeName()}
                         {this.isIncome()}
                     </View>
-
-                </View>
-
+                </TouchableOpacity>
             </View>
         )
     }
@@ -387,6 +341,12 @@ export default class extends Component {
         );
     }
 
+    Type_backButtonOnClick (type) {
+        this.setState({
+            type: type,
+            navigation: Navigation.note,
+        });
+    }
     // footer () {
     //     return (
     //         <View style={styles.footer}>
@@ -394,6 +354,14 @@ export default class extends Component {
     //         </View>
     //     );
     // }
+
+    chooseType () {
+        return (
+            <ChooseType 
+                isNavigatedToChooseType = {this.state.navigation === Navigation.chooseType}
+                backButtonOnClick = {this.Type_backButtonOnClick}
+            />);
+    }
 
       render() {
         let {
@@ -406,12 +374,13 @@ export default class extends Component {
                 visible={isNavigatedToNote}
                 animationType="slide">
                 <KeyboardAvoidingView 
-                style={styles.container}
-                behavior='padding'
-                >
-                    {this.header()}
-                    {this.body()}
-                    {/* {this.footer()} */}
+                    style={styles.container}
+                    behavior='padding'
+                    >
+                        {this.header()}
+                        {this.body()}
+                        {/* {this.footer()} */}
+                        {this.chooseType()}
                 </KeyboardAvoidingView>
             </Modal>
             

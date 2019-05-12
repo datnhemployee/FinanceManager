@@ -3,7 +3,7 @@ import {
     Dimensions,
 } from 'react-native';
 import Typeface from '../../../styles/Font';
-import Color from '../../../../old/src/styles/Color';
+import Color from '../../../../src/styles/Color';
 
 
 let { width, height } = Dimensions.get("window");

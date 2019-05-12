@@ -9,41 +9,21 @@ import {
 } from "react-native";
 import styles, { substyles } from "./Detail.style";
 import params from "./Detail.default";
-import { format } from "../../../utils/DateConvert";
-import Type from "../../../model/Type";
-import FirstLetterIcon from "../../component/FirstLetterIcon/FirstLetterIcon";
+import { format, getDatesFromID } from "../../../utils/DateConvert";
 import Typeface from "../../../styles/Font";
-import Color from "../../../styles/Color";
 import { ScrollView } from "react-native-gesture-handler";
-import Note from "../Note/Note";
-import Total from "../../../model/Total";
-import Card from "../../component/Card/Card";
 import SpenseController from "../../../controller/SpenseController";
+import Day from "../../../model/Day";
 
 export default class extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.navigate = this.navigate.bind(this);
-    this.getListByDate = this.getListByDate.bind(this);
-  }
-  getListByDate() {
-    let { dateLabel, detailList } = this.getProps();
-    detailList = SpenseController.getListByDate(
-      dateLabel.getDate(),
-      dateLabel.getMonth() + 1,
-      dateLabel.getFullYear()
-    );
-    console.log(detailList);
-  }
-  navigate() {
-    ///Bug: code điều hướng trang khi nhấn "Thêm thu chi"
   }
 
   getProps() {
     let {
-      detailedList= [],
-      detailedDate =  new Date(),
+      detailedDate =  Day.default(),
       backButtonOnClick = () => {
         console.log(`Clicked back button`);
       },
@@ -58,7 +38,6 @@ export default class extends Component {
     } = this.props;
     return {
       detailedDate,
-      detailedList,
       navigateToNote,
       backButtonOnClick,
       deleteAllButtonOnClick
@@ -82,9 +61,12 @@ export default class extends Component {
   }
 
   deleteAllButton() {
-    let { deleteAllButtonOnClick } = this.getProps();
+    let { detailedDate,deleteAllButtonOnClick } = this.getProps();
     return (
-      <TouchableOpacity onPress={deleteAllButtonOnClick}>
+      <TouchableOpacity onPress={async () => {await deleteAllButtonOnClick(
+        detailedDate.dayID,
+        detailedDate.total)
+        }}>
         <Text style={substyles.header.deleteAllButton}>
           {params.deleteText}
         </Text>
@@ -110,12 +92,18 @@ export default class extends Component {
 
   dateLable() {
     let { detailedDate } = this.getProps();
+    let {
+      day,
+      month,
+      year,
+    } = getDatesFromID(detailedDate);
     return (<Text style={substyles.body.top.dateLabel}>
       { 
-        Typeface.toCase(format({
-          day: detailedDate.getDate(),
-          month: detailedDate.getMonth(),
-          month: detailedDate.getFullYear(),}),
+        Typeface.toCase(format(
+          0,
+          day,
+          month,
+          year,),
           Typeface.type.overline)
       }
       </Text>);
@@ -131,12 +119,18 @@ export default class extends Component {
   }
 
   detailList() {
-    let { detailedList } = this.getProps();
+    let { detailedDate } = this.getProps();
     return (
       <View>
-        {detailedList.map((element, index) => {
-          return this.detailElement(element.name, element.price, index);
-        })}
+        {detailedDate.typeList.map((type) => (
+          <View >
+            {type.spenseList.map(
+              (spense)=>this.detailElement(
+                spense.name,
+                spense.price,
+                spense._id))} 
+          </View>
+        ))}
       </View>
     );
   }

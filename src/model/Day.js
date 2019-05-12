@@ -4,7 +4,7 @@ export default class Day {
     constructor () {}
     static default (dayID = getID().day()) {
         return {
-            ID: dayID,
+            dayID: dayID,
             total: 0,
             typeList: [
                 // {

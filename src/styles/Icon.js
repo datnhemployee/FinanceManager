@@ -66,11 +66,6 @@ export default {
         color = Color.Gray,
         }={}) => 
         <FontAwesome name={NameList.user} size={size} color={color}/>,
-    Left: ({
-        size = Size.default,
-        color = Color.Gray,
-        }={}) => 
-        <AntDesign name={NameList.left} size={size} color={color}/>,
     Right: ({
         size = Size.default,
         color = Color.Gray,

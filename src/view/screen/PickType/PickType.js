@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, KeyboardAvoidingView, TouchableOpacity, TextInput } from 'react-native';
+import { Text, View, KeyboardAvoidingView, TouchableOpacity, TextInput, Modal } from 'react-native';
 import styles, { substyles } from './PickType.style';
 import params from './PickType.default';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -8,6 +8,7 @@ import ColorPalette from 'react-native-color-palette';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FirstLetterIcon from '../../component/FirstLetterIcon/FirstLetterIcon';
 import TypeController from '../../../controller/TypeController'
+import Codes from '../../../constant/Codes';
 
 export default class PickType extends Component {
     constructor(props) {
@@ -17,6 +18,16 @@ export default class PickType extends Component {
             tabColor: 'green',
             selectedColor: '#AAAAAA',
             nameInputValue: ''
+        }
+    }
+    getProps () {
+        let {
+            isNavigateToPickType = false,
+            backButtonOnClick = () => console.log(`Vừa nhấn quay trở lại.`),
+        } = this.props;
+        return {
+            isNavigateToPickType,
+            backButtonOnClick,
         }
     }
 
@@ -35,34 +46,25 @@ export default class PickType extends Component {
         }
     };
 
-    async saveButtonClick(){
-        await TypeController.insert({
+  
+    async _backButtonClick(){
+        let {
+            backButtonOnClick,
+        } = this.getProps();
+
+        let typeToDB = {
             name: this.state.nameInputValue,
             isIncome: this.state.tabColor === 'green',
             color: this.state.selectedColor,
-        })
-    }
-    saveButton() {
-        return (
-            <TouchableOpacity
-                style={substyles.footer.saveButton}
-                onPress={()=>{this.saveButtonClick()}}
-            >
-                <Text style={substyles.footer.saveButtonText}>
-                    {params.saveButtonText}
-                </Text>
-            </TouchableOpacity>
-
-        );
-    }
-    backButtonClick(){
-        
+        };
+        let result = await TypeController.insert(typeToDB);
+        backButtonOnClick(result)
     }
     backButton() {
         return (
             <TouchableOpacity
                 style={substyles.header.backButton}
-                onPress={()=>{this.backButtonClick()}}
+                onPress={async ()=>{await this._backButtonClick()}}
             >
                 {params.backButtonIcon}
             </TouchableOpacity>
@@ -176,20 +178,23 @@ export default class PickType extends Component {
     footer() {
         return (
             <View style={styles.footer}>
-                {this.saveButton()}
             </View>
         );
     }
     render() {
+        let {
+            isNavigateToPickType,
+        } = this.getProps();
         return (
             <View style={styles.container}>
-                <KeyboardAvoidingView
+                <Modal
                     style={styles.container}
+                    visible = {isNavigateToPickType}
                     behavior='padding'>
                     {this.header()}
                     {this.body()}
                     {this.footer()}
-                </KeyboardAvoidingView>
+                </Modal>
             </View>
         )
     }

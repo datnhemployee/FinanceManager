@@ -4,8 +4,8 @@ import SpenseRepository from "../repository/SpenseRepository";
 
 export default class SpenseController {
 
-  static async getPage (index = 0) {
-    return await SpenseRepository.getPage(index);
+  static getPage (index = 1,callback) {
+    return SpenseRepository.getPage(index,callback);
   }
 
   static async get (id) {
@@ -92,5 +92,9 @@ export default class SpenseController {
         code: Codes.Exception,
         content: constraint,
       }
+  }
+
+  static async removeByDate (dayID) {
+    return SpenseRepository.removeByDate(dayID);
   }
 }

@@ -1,7 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
 import Typeface from "../../../styles/Font";
-import Color from "../../../../old/src/styles/Color";
-import ConstantValue from "../../../constant/ConstantValue";
+import Color from "../../../../src/styles/Color";
 
 let { width, height } = Dimensions.get("window");
 height = height - 30;
@@ -62,7 +61,7 @@ export const substyles = {
     },
     containerText: {
       ...Typeface.body[1],
-      fontSize: 30
+      // fontSize: 30
     },
     top: {
       dateLabel: {

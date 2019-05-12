@@ -27,7 +27,8 @@ const Default = {
     Blue: 'rgb(30, 144, 255)',
     Black:'rgb(0, 0, 0)',
     White: 'rgb(255, 255, 255)',
-    Gray: 'rgb(117, 117, 117)',
+    Gray: 'rgb(194, 194, 194)',
+    LightGray: 'rgb(245, 245, 245)',
 }
 
 export default {
