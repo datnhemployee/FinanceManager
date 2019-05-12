@@ -60,7 +60,7 @@ export const substyles = {
       justifyContent: "space-between"
     },
     containerText: {
-      ...Typeface.body[1],
+      ...Typeface.header[6],
       // fontSize: 30
     },
     top: {

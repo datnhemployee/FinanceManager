@@ -29,7 +29,7 @@ export default params = {
     type: Typeface.type.default
   }),
   btnAddText: Typeface.toCase({
-    text: "Thêm thu chi",
+    text: "Thêm thu chi hôm nay",
     type: Typeface.type.button
   }),
   deleteText: Typeface.toCase({

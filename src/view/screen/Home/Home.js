@@ -22,6 +22,9 @@ import Navigation from '../../../constant/Navigation';
 import ConstantRepository from '../../../repository/ConstantRepository';
 import Day from '../../../model/Day';
 import Codes from '../../../constant/Codes';
+import Spense from '../../../model/Spense';
+import Type from '../../../model/Type';
+import Color from '../../../styles/Color';
 
 export default class extends Component {
     constructor (props) {
@@ -42,6 +45,7 @@ export default class extends Component {
         this.onEndReached = this.onEndReached.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
         this.deleteAllButtonOnClick = this.deleteAllButtonOnClick.bind(this);
+        this.deleteSpense = this.deleteSpense.bind(this);
     }
 
     async deleteAllButtonOnClick (dayID,total) {
@@ -95,30 +99,33 @@ export default class extends Component {
         
     }
 
-    async updateDayList (page,dayID) {
+    async updateDayList (page) {
         console.log('updateDayList');
         SpenseController.getPage(page,(res)=>{
-            console.log('result out',JSON.stringify(res))
 
             if(res.code === Codes.Success){
+                let temp = this.state.dayList.slice();
+                let start = ((page -1) * 5);
+                let count = this.state.dayList.length - start;
+                temp.splice(start,count);
+                // console.log('render',JSON.stringify(res.content))
 
-                if(!!dayID)
-                    this.state.dayList = this.state.dayList.filter((val)=>val.dayID != dayID)
                 this.setState({
-                    dayList: [...this.state.dayList,...res.content],
+                    dayList: temp.concat(res.content),
                     currentPage: page,
                     refreshing: true,
                 });
                 this.setState({
                     refreshing: false,
                 })
-                return;
             } 
-    
-            ToastAndroid.show(
-                res.content,
-                ToastAndroid.LONG,
-            );
+            else {
+                    ToastAndroid.show(
+                    res.content,
+                    ToastAndroid.LONG,
+                );
+            }
+
         });
 
         
@@ -128,7 +135,7 @@ export default class extends Component {
         console.log('updateDayList');
 
         let wallet = await ConstantRepository.getWallet();
-        console.log('wallet didMount',JSON.stringify(wallet));
+        // console.log('wallet didMount',JSON.stringify(wallet));
 
         if(wallet.code != Codes.Success){
             ToastAndroid.show(
@@ -152,8 +159,37 @@ export default class extends Component {
         return {
         }
     }
+    async deleteSpense (price) {
+        if(!price) price = 0;
 
-    async backButtonOnClick (price,dayID) {
+        let walletFromDB = await ConstantRepository.getWallet();
+        
+
+        if(walletFromDB.code != Codes.Success){
+            ToastAndroid.show(
+                walletFromDB.content,
+                ToastAndroid.LONG,
+            );
+            return;
+        }
+        walletFromDB = await ConstantRepository.setWallet(walletFromDB.content - price);
+        if(walletFromDB.code != Codes.Success){
+            ToastAndroid.show(
+                walletFromDB.content,
+                ToastAndroid.LONG,
+            );
+            return;
+        }
+
+        this.setState({
+            navigation: Navigation.home,
+            wallet: walletFromDB.content,
+        })
+
+        await this.updateDayList(this.state.currentPage);
+    }
+
+    async backButtonOnClick (price) {
         if(!price) price = 0;
 
         let walletFromDB = await ConstantRepository.getWallet();
@@ -178,11 +214,12 @@ export default class extends Component {
             navigation: Navigation.home,
             wallet: walletFromDB.content,
         })
-        await this.updateDayList(this.state.currentPage,dayID);
+        await this.updateDayList(this.state.currentPage);
     }
 
     navigateToNote() {
         this.setState({navigation: Navigation.note});
+        this.refNote.update(Spense.default(),Type.default());
     }
 
     navigateNoteButton () {
@@ -216,7 +253,7 @@ export default class extends Component {
         const localStyles = substyles.header.mid;
         return (
             <Text 
-                style={localStyles.change}>
+                style={[localStyles.change,this.state.wallet >= 0?{color:Color.DarkGreen}:{color:Color.Red}]}>
                 {/* {params.changeTitle} */}
                 {Typeface.toCase({
                     text: this.state.wallet + ' đ',
@@ -236,6 +273,7 @@ export default class extends Component {
         return (<View/>)
     }
     header () {
+
         return (
             <View style={styles.header}>
                 {this.topHeader()}
@@ -288,6 +326,7 @@ export default class extends Component {
     }
 
     footer () {
+
         return (
             <View style={styles.footer}>
                 {this.navigateNoteButton()}
@@ -300,6 +339,7 @@ export default class extends Component {
             <Note 
                 isNavigatedToNote= {this.state.navigation === Navigation.note}
                 backButtonOnClick = {this.backButtonOnClick}
+                ref = {(Note) => this.refNote = Note}
             />
         )
     }
@@ -315,6 +355,7 @@ export default class extends Component {
                 navigateToNote = {this.navigateToNote}
                 backButtonOnClick = {this.backButtonOnClick}
                 deleteAllButtonOnClick = {this.deleteAllButtonOnClick}
+                deleteSpense = {this.deleteSpense}
             />
         )
     }

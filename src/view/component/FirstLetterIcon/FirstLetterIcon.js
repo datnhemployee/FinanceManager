@@ -21,10 +21,12 @@ export default class extends Component {
     getProps () {
         let {
             firstLetter = '\+',
-            color = Color.Blue,
+            color = Color.White,
             fontSize = 30,
             size = {width : 50, height : 50, borderRadius : 50},
         } = this.props;
+        console.log('FirstLetter',JSON.stringify(firstLetter));
+        console.log('color',JSON.stringify(color));
         return {
             firstLetter,
             color,
@@ -47,6 +49,7 @@ export default class extends Component {
             fontSize,
             size,
         } = this.getProps();
+
         return (
             <Text 
                 style={[

@@ -5,4 +5,5 @@ export default {
     detail: 2,
     pickType: 3,
     chooseType: 4, 
+    update: 5,
 }

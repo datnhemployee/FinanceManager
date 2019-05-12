@@ -83,10 +83,9 @@ export default class ChooseType extends Component {
             backButtonOnClick,
         } = this.getProps();
         let typeFromDB = await TypeController.getByName(this.state.chosenType);
-        console.log(typeof this.state.chosenType)
 
         if(typeFromDB.code === Codes.Success){
-            backButtonOnClick(typeFromDB);
+            backButtonOnClick(typeFromDB.content);
         } else {
             backButtonOnClick({
                 name: ``,

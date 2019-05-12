@@ -14,12 +14,27 @@ import Typeface from '../../../styles/Font';
 import Color, { RBGColor } from '../../../styles/Color'
 import PieChart from '../PieChart/PieChart';
 import SnipetType from '../SnipetType/SnipetType';
+import Type from '../../../model/Type';
+import TypeController from '../../../controller/TypeController';
 
 export default class extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            typeList: [Type.default()]
         }
+    }
+
+    async componentDidMount () {
+        let {
+            typeList,
+        } = this.getProps();
+        let temp = [];
+        typeList.forEach(async (val)=> {
+            temp.push(await TypeController.getByName(val.name));
+            this.setState({typeList: temp});
+        })
+        console.log(JSON.stringify(temp))
     }
     getProps () {
         let {
@@ -78,7 +93,7 @@ export default class extends Component {
         return (
             <Text style={[
                 localStyle.spentMoney,
-                {color: total >= 0 ? Color.Red: Color.DarkGreen}]}>
+                {color: total >= 0 ? Color.DarkGreen: Color.Red}]}>
                 {Typeface.toCase({
                     text: total + ' đ',
                     type: Typeface.type.default,    
@@ -97,7 +112,6 @@ export default class extends Component {
 
         let totalInDate = 0;
         let SpentTypesList = typeList.slice();
-
         let i = 0;
         while(i < SpentTypesList.length) {
             if(!SpentTypesList[i].isIncome){
@@ -118,13 +132,14 @@ export default class extends Component {
             SpentTypesList.map((e,i) => {
                 let amount = e.total / totalInDate;
 
+                let tempType = this.state.typeList.find((val)=>val.name==e.name);
                 // let colorFrame = RBGColor.Red;
                 // colorFrame.B = (e.total + colorFrame.G) % 255;
                 // colorFrame.G = (e.total + colorFrame.G) % 255;
                 return {
                     key: i ,
                     amount: !amount ? 100: amount,
-                    svg: { fill: Color.Red},
+                    svg: { fill: tempType? tempType.color:Color.Gray},
                 }
             })
 

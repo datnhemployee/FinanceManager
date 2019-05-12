@@ -18,7 +18,7 @@ const StandardSize = {
 }
 
 const Size = {
-    default: StandardSize.small,
+    default: StandardSize.intermediate,
     ...StandardSize,
 }
 const NameList = {
@@ -61,6 +61,10 @@ const NameList = {
 const untapColor = Color.Gray;
 
 export default {
+    Remove: (
+        size = Size.default,
+        color = Color.Red,
+    ) => <MaterialCommunityIcons name={"delete-empty"} size={size} color={color}/>,
     User: ({
         size = Size.default,
         color = Color.Gray,

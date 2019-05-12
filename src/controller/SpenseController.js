@@ -76,17 +76,9 @@ export default class SpenseController {
       undefined;
       
       if(!constraint){
-        let result = {
-          code: Codes.None,
-        }
-        let removeResult = await SpenseRepository.remove(id,update);
-        if (removeResult.code === Codes.Exception)
-          return removeResult;
 
-        return {
-          code: Codes.Success,
-          content: removeResult,
-        }
+        return await SpenseRepository.remove(id);
+       
       }
       return {
         code: Codes.Exception,

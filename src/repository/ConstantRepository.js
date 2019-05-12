@@ -36,7 +36,7 @@ export default class ConstantRepository {
     static async getWallet () {
         let result = {}
         let walletFromDB = await AsyncStorage.getItem(`wallet`);
-        console.log('wallet getWallet',JSON.stringify(walletFromDB));
+        // console.log('wallet getWallet',JSON.stringify(walletFromDB));
 
         if (!!walletFromDB){
             return {

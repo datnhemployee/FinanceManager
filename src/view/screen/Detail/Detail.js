@@ -5,7 +5,9 @@ import {
   Text,
   TouchableOpacity,
   Modal,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ViewPagerAndroid,
+  ToastAndroid
 } from "react-native";
 import styles, { substyles } from "./Detail.style";
 import params from "./Detail.default";
@@ -14,11 +16,35 @@ import Typeface from "../../../styles/Font";
 import { ScrollView } from "react-native-gesture-handler";
 import SpenseController from "../../../controller/SpenseController";
 import Day from "../../../model/Day";
+import Icon, { Size } from "../../../styles/Icon";
+import Codes from "../../../constant/Codes";
+import Color from "../../../styles/Color";
 
 export default class extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+    };
+    this.deleteButtonOnClick = this.deleteButtonOnClick.bind(this);
+  }
+
+  async deleteButtonOnClick (price,id) {
+    let {
+      deleteSpense,
+    } = this.getProps();
+    let removeResult = await SpenseController.remove(id);
+
+    if (removeResult.code === Codes.Success){
+
+      await deleteSpense(price);
+      console.log('remove success',JSON.stringify(price));
+
+      ToastAndroid.show(`Xóa thành công chi tiêu.`,ToastAndroid.LONG);
+    } else {
+       console.log('remove failed',JSON.stringify(price));
+       await deleteSpense(0);
+      ToastAndroid.show(`Xóa thất bại chi tiêu.`,ToastAndroid.LONG);
+    }
   }
 
   getProps() {
@@ -33,14 +59,19 @@ export default class extends Component {
       navigateToNote = () => {
         console.log(`Vừa nhấn Thêm chi tiêu`);
       },
+      deleteSpense = () => {
+        console.log(`Vừa nhấn Xóa chi tiêu`);
+      },
       // list = [params.defaultText]
       //   detailList = [params.detailList]
     } = this.props;
+
     return {
       detailedDate,
       navigateToNote,
       backButtonOnClick,
-      deleteAllButtonOnClick
+      deleteAllButtonOnClick,
+      deleteSpense,
     };
   }
 
@@ -109,21 +140,39 @@ export default class extends Component {
       </Text>);
   }
 
-  detailElement(expenseName, amount, index) {
+  detailElement(expenseName, amount, id) {
     return (
-      <View style={substyles.body.container} key={index}>
-        <Text style={substyles.body.containerText}>{expenseName}</Text>
-        <Text style={substyles.body.containerText}>{amount}</Text>
-      </View>
+      <ViewPagerAndroid 
+        key = {expenseName + amount}
+        style={substyles.body.container} 
+        initialPage={0}>
+        <View
+          style={substyles.body.container}
+          key={expenseName}>
+          <Text style={substyles.body.containerText}>{expenseName}</Text>
+          <Text style={substyles.body.containerText}>{amount}</Text>
+        </View>
+        <View style={{flex:1}}>
+          <TouchableOpacity
+            style={{flex:1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}
+            key={expenseName + 1}
+            onPress={async () => { await this.deleteButtonOnClick(amount,id)}}>
+            {Icon.Remove(Size.large)}
+            <Text style={{...Typeface.button,color: Color.Red}}>XÓA</Text>
+          </TouchableOpacity>
+        </View>
+      </ViewPagerAndroid> 
     );
   }
 
   detailList() {
-    let { detailedDate } = this.getProps();
+    let {
+      detailedDate,
+    } = this.getProps();
     return (
       <View>
         {detailedDate.typeList.map((type) => (
-          <View >
+          <View key={type.name}>
             {type.spenseList.map(
               (spense)=>this.detailElement(
                 spense.name,

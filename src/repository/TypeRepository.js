@@ -26,27 +26,22 @@ export default class TypeRepository {
         }
     }
 
-    static find (name) {
+    static async find (name) {
         let result = {
             code: Codes.None,
         }
-        TypeDatastore.findOne({
+        let typeFromDB = await TypeDatastore.findOneAsync ({
             name: name,
-        },(err,res)=>{
-            if(err) {
-                result = {
-                    code: Codes.Exception,
-                    content: `Không thể tìm thấy loại chi tiêu.`,
-                }
-            } else {
-                result = {
-                    code: Codes.Success,
-                    content: res,
-                }
+        });
+        if(!!typeFromDB)
+            return {
+                code: Codes.Success,
+                content: typeFromDB,
             }
-        })
-
-        return result;
+        return {
+            code: Codes.Exception,
+            content: `Không thể tìm thấy loại chi tiêu.`,
+        }
     }
 
 

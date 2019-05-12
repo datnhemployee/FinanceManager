@@ -33,7 +33,6 @@ export default class extends Component {
             },
             // isAvailable_name: false,
             // isAvailable_price: false,
-            isIncome: false,
             type: Type.default(),
             navigation: Navigation.note,
         }
@@ -47,47 +46,28 @@ export default class extends Component {
     }
 
     async componentDidMount ( ) {
-        this.setState({
-            isIncome: await TypeController.isIncome(
-                this.state.spense.typeID,
-            ),
-        });
-        
-    }
-
-    _onInputChange (text, key) {
-        
-        this.setState({spense: {
-            ...this.state.spense,
-            ...{
-                [key]: text,
-            },
-        }});
-        
     }
 
     _onChangeName (text) {
-        this._onInputChange(text,'name');
-        // if(!!this.state.spense.name){
-        //     this.setState({isAvailable_name: true});
-        // } else {
-        //     this.setState({isAvailable_name: false});
-        // }
-        // console.log('isAvailable_name',this.state.isAvailable_name)
+        this.state.spense.name = text;
+        this.setState({spense: this.state.spense});
     }
 
     _onChangePrice (text) {
-        this._onInputChange(text,'price')
-        // if(!!this.state.spense.price){
-        //     this.setState({isAvailable_price: true});
-        // } else {
-        //     this.setState({isAvailable_price: false});
-        // }
-        // console.log('isAvailable_price',this.state.isAvailable_price)
+        this.state.spense.price = text;
+        this.setState({spense: this.state.spense});
     }
 
     _onChangeDescription (text) {
-        this._onInputChange(text,'description')
+        this.state.spense.description = text;
+        this.setState({spense: this.state.spense});
+    }
+
+    update (update,typeUpdate) {
+        this.setState({
+            spense: update,
+            type: typeUpdate,
+        });
     }
 
     async _backButtonOnClick () {
@@ -106,20 +86,19 @@ export default class extends Component {
             await backButtonOnClick();
             return;
         }
-        let isIncome = await TypeController.isIncome(0);
         let priceToSave = Math.abs(parseInt(this.state.spense.price));
-        if(!isIncome){
+        if(!this.state.type.isIncome){
             priceToSave = priceToSave * -1;
         }
 
         let dayIDToSave = getID().day();
         
         const spenseToDB = {
-            ...this.state.spense,
-            ...{
-                price: priceToSave,
-                dayID: dayIDToSave,
-            }
+            description: this.state.spense.description,
+            name: this.state.spense.name,
+            type: this.state.type.name,
+            price: priceToSave,
+            dayID: dayIDToSave,
         }
         console.log(JSON.stringify(spenseToDB))
 
@@ -181,12 +160,12 @@ export default class extends Component {
         return (
             <Text style={[
                 localStyles.isIncome,
-                this.state.isIncome ? {
-                    backgroundColor: Color.LightGreen,
+                this.state.type.isIncome ? {
+                    backgroundColor: Color.DarkGreen,
                 }:{
                     backgroundColor: Color.Red,
                 }]} >
-                {this.state.isIncome ? 
+                {this.state.type.isIncome ? 
                     params.income:
                     params.outcome}
             </Text>
@@ -224,7 +203,7 @@ export default class extends Component {
                         style={localStyles.mid.icon}
                         firstLetter={!this.state.type.name ? 
                             undefined:
-                            this.state.type[0]
+                            this.state.type.name[0]
                         }
                         color={this.state.type.color}
                     />
@@ -342,6 +321,7 @@ export default class extends Component {
     }
 
     Type_backButtonOnClick (type) {
+        console.log('trở lại: ',JSON.stringify(type))
         this.setState({
             type: type,
             navigation: Navigation.note,

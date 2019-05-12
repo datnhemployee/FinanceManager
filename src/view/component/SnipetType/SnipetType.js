@@ -3,16 +3,21 @@ import React, { Component } from 'react';
 import { 
     View,
     Text,
+    ToastAndroid,
 } from 'react-native';
 import styles, { substyles } from './SnipetType.style';
 import params from './SnipetType.default';
 import Typeface from '../../../styles/Font';
 import FirstLetterIcon from '../FirstLetterIcon/FirstLetterIcon';
+import TypeController from '../../../controller/TypeController';
+import Type from '../../../model/Type';
+import Codes from '../../../constant/Codes';
 
 export default class extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            type: Type.default(),
         }
     }
     getProps () {
@@ -26,17 +31,27 @@ export default class extends Component {
             total,
         }
     }
-    
-    name () {
+
+    async componentWillMount() {
         let {
             name,
         } = this.getProps();
+        let result = await TypeController.getByName(name);
+        if(result.code === Codes.Success){
+            this.setState({type: result.content});
+        } else {
+            ToastAndroid.show(result.content,ToastAndroid.LONG);
+        }
+    }
+    
+    name () {
+        
         let localStyles = substyles.header;
         return (
             <Text 
                 style={localStyles.name}>
                 {Typeface.toCase({
-                    text: name,
+                    text: this.state.type.name,
                     type: Typeface.type.default,
                 })}
             </Text>
@@ -44,14 +59,16 @@ export default class extends Component {
     }
 
     icon () {
-        let {
-            name,
-        } = this.getProps();
+        
         let localStyles = substyles.body;
+        let firstLetter = '';
+        if(this.state.type.name.length != 0)
+            firstLetter = this.state.type.name[0];
         return (
             <FirstLetterIcon 
                 style = {localStyles.icon}
-                firstLetterIcon={name === params.defaultName?undefined:name[0]}/>
+                firstLetter={firstLetter}
+                color={this.state.type.color}/>
         )
     }
 

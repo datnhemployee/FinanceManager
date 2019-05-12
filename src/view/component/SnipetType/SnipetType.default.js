@@ -2,6 +2,6 @@ import Typeface from "../../../styles/Font";
 import Type from "../../../model/Type";
 
 export default {
-    defaultName: 'Không tên',
+    defaultName: '',
     defaultTotal: 0,
 }
