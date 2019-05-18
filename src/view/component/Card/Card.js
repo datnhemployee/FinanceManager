@@ -127,6 +127,9 @@ export default class extends Component {
         const isDefault = ((SpentTypesList.length == 1)
             &&(SpentTypesList[0].spenseList.length === 0));
 
+        console.log(SpentTypesList);
+        let allType = TypeController.getAll();
+        console.log(allType);
         const data = isEmpty || isDefault ? 
             undefined:
             SpentTypesList.map((e,i) => {
