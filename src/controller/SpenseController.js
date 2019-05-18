@@ -47,7 +47,7 @@ export default class SpenseController {
       `Chi tiêu không đầy đủ thông tin.`: 
       !update.name ?
       `Chưa nhập tên chi tiêu.`:
-      update.length < 4 ?
+      update.name.length < 4 ?
       `Tên chi tiêu phải trên 4 kí tự.`:
       undefined;
       

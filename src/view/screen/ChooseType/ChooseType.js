@@ -63,18 +63,24 @@ export default class ChooseType extends Component {
     getProps () {
         let {
             isNavigatedToChooseType = false,
-            backButtonOnClick = () => console.log(`Vừa nhấn chọn loại chi tiêu`)
+            backButtonOnClick = () => console.log(`Vừa nhấn chọn loại chi tiêu`),
+            typeButtonOnClick = () => console.log(`Vừa nhấn quay về thêm chi tiêu`),
         } = this.props;
 
         return {
             isNavigatedToChooseType,
             backButtonOnClick,
+            typeButtonOnClick,
         };
     }
     _chosenTypeOnPress (name) {
         console.log('Đang chọn: ',this.state.chosenType);
+        let result = ``;
+        if(this.state.chosenType != name){
+            result = name;
+        }
         this.setState({
-            chosenType: name,
+            chosenType: result,
         });
     }
 
@@ -138,12 +144,21 @@ export default class ChooseType extends Component {
     }
 
     _renderIncomeItems(item) {
+        let {
+            typeButtonOnClick,
+        } = this.getProps();
         if (item.isIncome) {
             return (
                 <Item
+                    key = {item.name + item.color}
                     name={item.name}
                     color={item.color}
-                    onPress = {() => {this._chosenTypeOnPress(item.name)}}
+                    // onPress = {() => {this._chosenTypeOnPress(item.name)}}
+                    onPress = {() => {typeButtonOnClick({
+                        name: item.name,
+                        isIncome: item.isIncome,
+                        color: item.color,
+                    })}}
                     isPick = {item.name === this.state.chosenType}
                 />
             )
@@ -162,12 +177,21 @@ export default class ChooseType extends Component {
         )
     }
     _renderSpendItems(item) {
+        let {
+            typeButtonOnClick,
+        } = this.getProps();
         if (!item.isIncome) {
             return (
                 <Item
+                    key = {item.name + item.color}
                     name={item.name}
                     color={item.color}
-                    onPress = {() => {this._chosenTypeOnPress(item.name)}}
+                    // onPress = {() => {this._chosenTypeOnPress(item.name)}}
+                    onPress = {() => {typeButtonOnClick({
+                        name: item.name,
+                        isIncome: item.isIncome,
+                        color: item.color,
+                    })}}
                     isPick = {item.name === this.state.chosenType}
                 />
             )
@@ -195,6 +219,7 @@ export default class ChooseType extends Component {
     }
     createNewClick() {
         this.setState({navigation: Navigation.pickType});
+        this.refPickType.refresh();
     }
     createNew() {
         return (
@@ -219,7 +244,8 @@ export default class ChooseType extends Component {
 
     async componentDidMount() {
 
-        this.setState({listType: await TypeController.getAll().content});
+        let typeFromDB = await TypeController.getAll();
+        this.setState({listType: typeFromDB.content});
     }
 
 
@@ -228,6 +254,7 @@ export default class ChooseType extends Component {
         return (<PickType
                     isNavigateToPickType = {this.state.navigation === Navigation.pickType} 
                     backButtonOnClick = {this.pickType_backButtonOnClick}
+                    ref = {(refPickType) => {this.refPickType = refPickType}}
                 />)
     }
 

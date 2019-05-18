@@ -52,13 +52,11 @@ export default class PickType extends Component {
             backButtonOnClick,
         } = this.getProps();
 
-        let typeToDB = {
-            name: this.state.nameInputValue,
-            isIncome: this.state.tabColor === 'green',
-            color: this.state.selectedColor,
-        };
-        let result = await TypeController.insert(typeToDB);
-        backButtonOnClick(result)
+        
+        backButtonOnClick({
+            code: Codes.Exception,
+            content: `Thêm loại giao dịch thất bại.`,
+        })
     }
     backButton() {
         return (
@@ -175,11 +173,48 @@ export default class PickType extends Component {
             </ScrollView>
         );
     }
+    async saveButtonClick(){
+        let {
+            backButtonOnClick,
+        } = this.getProps();
+
+        let typeToDB = {
+            name: this.state.nameInputValue,
+            isIncome: this.state.tabColor === 'green',
+            color: this.state.selectedColor,
+        };
+        let result = await TypeController.insert(typeToDB);
+        backButtonOnClick(result)
+
+    }
+    saveButton() {
+        return (
+            <TouchableOpacity
+                style={substyles.footer.saveButton}
+                onPress={async () => { await this.saveButtonClick() }}
+            >
+                <Text style={substyles.footer.saveButtonText}>
+                    {params.saveButtonText}
+                </Text>
+            </TouchableOpacity>
+
+        );
+
+    }
     footer() {
         return (
             <View style={styles.footer}>
+                {this.saveButton()}
             </View>
         );
+    }
+    refresh() {
+        this.setState({
+                selectedIndex: 0,
+                tabColor: 'green',
+                selectedColor: '#AAAAAA',
+                nameInputValue: ''
+        });
     }
     render() {
         let {
