@@ -17,13 +17,15 @@ export default class TypeController {
     return false;
   }
   static async insert (type) {
+    console.log(JSON.stringify(type))
     let constraint = !type ? 
     `Loại chi tiêu không đầy đủ thông tin.`: 
     !type.name ?
     `Chưa nhập tên loại chi tiêu.`:
-    type.length < 4 ?
+    type.name.length < 4 ?
     `Tên loại chi tiêu phải trên 4 kí tự.`:
     undefined;
+    console.log(JSON.stringify(constraint))
     
     if(!constraint){
         

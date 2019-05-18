@@ -17,9 +17,10 @@ export default class SpenseRepository {
 
     static async removeByDate(dayID) {
         await SpenseDatastore.removeAsync({dayID: dayID},{multi: true});
+        let result = await DayDatastore.removeAsync({dayID: dayID},{multi: true});
         return {
             code: Codes.Success,
-            content: await DayDatastore.removeAsync({dayID: dayID},{multi: true}),
+            content: result,
         }
     }
     static async get (id) {
