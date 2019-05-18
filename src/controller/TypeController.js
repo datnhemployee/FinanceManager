@@ -26,9 +26,7 @@ export default class TypeController {
     undefined;
     
     if(!constraint){
-        let result = {
-        code: Codes.None,
-        }
+        
         return await TypeRepository.insert(type);
     }
     return {

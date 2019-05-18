@@ -183,7 +183,9 @@ export default class extends Component {
 
     _navigateToChooseType () {
         console.log('qua màn hình chooseType',this.state.navigation);
-        this.setState({navigation: Navigation.chooseType})
+        this.setState({
+            navigation: Navigation.chooseType,
+        })
     }
 
     inputType () {
@@ -320,7 +322,7 @@ export default class extends Component {
         );
     }
 
-    Type_backButtonOnClick (type) {
+    Type_backButtonOnClick (type = Type.default()) {
         console.log('trở lại: ',JSON.stringify(type))
         this.setState({
             type: type,
@@ -340,6 +342,7 @@ export default class extends Component {
             <ChooseType 
                 isNavigatedToChooseType = {this.state.navigation === Navigation.chooseType}
                 backButtonOnClick = {this.Type_backButtonOnClick}
+                typeButtonOnClick = {this.Type_backButtonOnClick}
             />);
     }
 

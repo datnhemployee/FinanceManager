@@ -55,7 +55,7 @@ export default class TypeRepository {
         let matchIndex = matchColorArray.findIndex((val)=> val.name[0]===type.name[0]);
         console.log('check type',matchIndex);
 
-        return TypeRepository.find(name).code === Codes.Success ?
+        return TypeRepository.find(type.name).code === Codes.Success ?
             `Không thể thêm chi tiêu cùng tên.`:
             matchIndex != -1 ?
             `Không thể thêm chi tiêu cùng chữ cái đầu và cùng màu.`:
