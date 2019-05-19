@@ -55,7 +55,7 @@ export default class PickType extends Component {
         
         backButtonOnClick({
             code: Codes.Exception,
-            content: `Thêm loại giao dịch thất bại.`,
+            content: ``,
         })
     }
     backButton() {
