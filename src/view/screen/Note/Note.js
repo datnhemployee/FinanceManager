@@ -8,6 +8,7 @@ import {
     Modal,
     KeyboardAvoidingView,
     ToastAndroid,
+    DatePickerAndroid,
 } from 'react-native';
 import styles, { substyles } from './Note.style';
 import params from './Note.default';
@@ -25,6 +26,7 @@ import Type from '../../../model/Type';
 export default class extends Component {
     constructor (props) {
         super(props);
+        let curDate = new Date();
         this.state = {
             spense: {
                 name: ``,
@@ -35,6 +37,11 @@ export default class extends Component {
             // isAvailable_price: false,
             type: Type.default(),
             navigation: Navigation.note,
+            date: {
+                day: curDate.getDate(),
+                month: curDate.getMonth(),
+                year: curDate.getFullYear()
+            },
         }
 
         this._backButtonOnClick = this._backButtonOnClick.bind(this);
@@ -90,8 +97,12 @@ export default class extends Component {
         if(!this.state.type.isIncome){
             priceToSave = priceToSave * -1;
         }
-
-        let dayIDToSave = getID().day();
+        let dayToSave = new Date(
+            this.state.date.year,
+            this.state.date.month,
+            this.state.date.day,
+        )
+        let dayIDToSave = getID(dayToSave).day();
         
         const spenseToDB = {
             description: this.state.spense.description,
@@ -188,6 +199,33 @@ export default class extends Component {
         })
     }
 
+    datePicker () {
+        let dayPick = this.state.date.day;
+        let monthPick = this.state.date.month;
+        let yearPick = this.state.date.year;
+        return (
+            <TouchableOpacity
+                onPress={async () => {
+                    try {
+                        const {action, year, month, day} = await DatePickerAndroid.open({
+                          date: new Date(yearPick,monthPick,dayPick),
+                        });
+                        if (action !== DatePickerAndroid.dismissedAction) {
+                            this.setState({date: {
+                                day: day,
+                                month: month,
+                                year: year,
+                            }})
+                        } 
+                      } catch ({code, message}) {
+                        console.warn('Cannot open date picker', message);
+                      }
+                }}>
+                <Text>Chọn ngày {dayPick} {monthPick + 1} {yearPick}</Text>
+            </TouchableOpacity> 
+        )
+    }
+
     inputType () {
         let {
             // type,
@@ -263,6 +301,7 @@ export default class extends Component {
         } = this.props;
         return (
             <View style={substyles.body.container}>
+                {this.datePicker()}
                 {this.inputName()}
                 {this.inputType()}
                 {this.inputPrice()}

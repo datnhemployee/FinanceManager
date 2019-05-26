@@ -228,33 +228,44 @@ export default class SpenseRepository {
 
                     day.typeList[typeIndex].spenseList = day.typeList[typeIndex].spenseList.filter((val)=>val._id != id);
                     console.log('after',JSON.stringify(day))
-                    let removeResult = await DayDatastore.removeAsync({dayID: spense.dayID});
-                    if(removeResult === 0){
-                        return {
-                            code: Codes.Exception,
-                            content: `Không thể thực hiện xóa chi tiêu tại tổng kết chi tiêu cũ`,
+                    try {
+                        let removeResult = await DayDatastore.removeAsync({dayID: spense.dayID});
+                        console.log('after remove',JSON.stringify(removeResult))
+                        
+                        if (day.total === 0) {
+                            return {
+                                code: Codes.Success,
+                                content: ` Xóa chi tiêu thành công với việc xóa ngày. `,
+                            }
                         }
-                    }
-                    if (day.typeList[typeIndex].spenseList.length == 0){
+                        if(removeResult === 0){
+                            return {
+                                code: Codes.Exception,
+                                content: `Không thể thực hiện xóa chi tiêu tại tổng kết chi tiêu cũ`,
+                            }
+                        }
+
+                        if (day.typeList[typeIndex].spenseList.length == 0){
+                            day.typeList.filter((val) => val.spenseList.length === 0);
+                        }
+                        
+                        let insertResult = await DayDatastore.insertAsync(day);
+                        console.log('remove result: ',JSON.stringify(insertResult));
+    
+                        if (!insertResult){
+                            return {
+                                code: Codes.Exception,
+                                content: `Không thể thực hiện cập nhật lại tổng kết chi tiêu cũ`,
+                            }
+                        }
                         return {
                             code: Codes.Success,
-                            content: `Dọn dẹp thành công ngày chi tiêu.`,
+                            content: insertResult,
                         }
+                    } catch (Exception) {
+                        console.log(`Error removeAsync ${Exception}`)
                     }
                     
-                    let insertResult = await DayDatastore.insertAsync(day);
-                    console.log('remove result: ',JSON.stringify(insertResult));
-
-                    if (!insertResult){
-                        return {
-                            code: Codes.Exception,
-                            content: `Không thể thực hiện cập nhật lại tổng kết chi tiêu cũ`,
-                        }
-                    }
-                    return {
-                        code: Codes.Success,
-                        content: insertResult,
-                    }
                 },
             }
         }

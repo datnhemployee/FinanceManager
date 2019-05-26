@@ -3,7 +3,7 @@ import Color from '../../../styles/Color'
 import Typeface from "../../../styles/Font";
 
 let {width, height} =Dimensions.get("window");
-height = (height - 30 ) ;
+height = (height - 100 ) ;
 
 let size = {
     footer: 2 * height / 10,

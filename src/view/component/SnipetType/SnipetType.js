@@ -32,7 +32,7 @@ export default class extends Component {
         }
     }
 
-    async componentWillMount() {
+    async componentDidMount() {
         let {
             name,
         } = this.getProps();

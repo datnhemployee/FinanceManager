@@ -100,7 +100,7 @@ export default class extends Component {
     }
 
     async updateDayList (page) {
-        console.log('updateDayList');
+        // console.log('updateDayList');
         SpenseController.getPage(page,(res)=>{
 
             if(res.code === Codes.Success){
@@ -300,6 +300,8 @@ export default class extends Component {
                     Day.default():
                     this.state.dayList}
             renderItem={({item}) => {
+            console.log(`listCard ${JSON.stringify(item)}`)
+
                 return (
                 <Card 
                     // style={{flex: 1}}

@@ -38,13 +38,14 @@ export default class extends Component {
     }
     getProps () {
         let {
-            dateID = params.defaultDateID,
+            dayID,
+            // = params.defaultDateID,
             total = params.defaultTotal,
             typeList = params.defaultType,
             onClick,
         } = this.props;
         return {
-            dateID,
+            dayID,
             total,
             typeList,
             onClick,
@@ -52,15 +53,14 @@ export default class extends Component {
     }
     dateLable () {
         let {
-            dateID, 
+            dayID, 
         } = this.getProps();
         let localStyle = substyles.header;
-
         let {
             day,
             month,
             year,
-        } = getDatesFromID(dateID);
+        } = getDatesFromID(dayID);
 
         let date = Typeface.toCase({
             text: format(0,day,month +1,year),
@@ -104,7 +104,7 @@ export default class extends Component {
 
     pieChart () {
         let {
-            dateID,
+            dayID,
             total,
             typeList,
             onClick,
@@ -121,7 +121,7 @@ export default class extends Component {
                 SpentTypesList.splice(i,1);
             }
         }
-
+        SpentTypesList = SpentTypesList.filter((val) => val.total != 0).slice();
         const isEmpty = SpentTypesList.length == 0;
         
         const isDefault = ((SpentTypesList.length == 1)
@@ -150,7 +150,7 @@ export default class extends Component {
             <TouchableOpacity
                 onPress= {() => {
                     onClick({
-                        dayID: dateID,
+                        dayID: dayID,
                         total,
                         typeList,
                     })}}>
