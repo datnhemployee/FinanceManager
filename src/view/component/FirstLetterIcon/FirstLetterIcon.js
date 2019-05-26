@@ -25,8 +25,8 @@ export default class extends Component {
             fontSize = 30,
             size = {width : 50, height : 50, borderRadius : 50},
         } = this.props;
-        console.log('FirstLetter',JSON.stringify(firstLetter));
-        console.log('color',JSON.stringify(color));
+        //console.log('FirstLetter',JSON.stringify(firstLetter));
+        //console.log('color',JSON.stringify(color));
         return {
             firstLetter,
             color,

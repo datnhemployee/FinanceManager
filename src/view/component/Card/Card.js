@@ -127,22 +127,24 @@ export default class extends Component {
         const isDefault = ((SpentTypesList.length == 1)
             &&(SpentTypesList[0].spenseList.length === 0));
 
-        console.log(SpentTypesList);
+        //console.log("spend type list : " + JSON.stringify(SpentTypesList));
         let allType = TypeController.getAll();
-        console.log(allType);
+        //console.log("all type :" + JSON.stringify(allType));
+
         const data = isEmpty || isDefault ? 
             undefined:
             SpentTypesList.map((e,i) => {
                 let amount = e.total / totalInDate;
-
-                let tempType = this.state.typeList.find((val)=>val.name==e.name);
+                let color = allType.content.find((val)=>val.name === e.name).color;
+                //let tempType = this.state.typeList.find((val)=>val.name==e.name);
                 // let colorFrame = RBGColor.Red;
                 // colorFrame.B = (e.total + colorFrame.G) % 255;
                 // colorFrame.G = (e.total + colorFrame.G) % 255;
                 return {
                     key: i ,
                     amount: !amount ? 100: amount,
-                    svg: { fill: tempType? tempType.color:Color.Gray},
+                    svg: { fill: color},
+                    //svg: { fill: tempType? tempType.color:Color.Gray},
                 }
             })
 
@@ -155,7 +157,8 @@ export default class extends Component {
                         typeList,
                     })}}>
                 <PieChart 
-                    data={data}/>
+                    data={data}>
+                </PieChart>
             </TouchableOpacity>
             
         )
