@@ -1,3 +1,11 @@
+<<<<<<< Updated upstream
+=======
+import React, { Component } from "react";
+import { Text, View, AsyncStorage } from "react-native";
+import Home from './src/view/screen/Home/Home';
+// import SpenseRepository from "./src/repository/SpenseRepository";
+import seed from './src/utils/Seed';
+>>>>>>> Stashed changes
 
 import React, {Component} from 'react';
 import { StyleSheet, Text, View} from 'react-native';
@@ -21,12 +29,23 @@ export default class App extends Component {
     // SQLite.DEBUG(true);
     // SQLite.enablePromise(true);
 
+<<<<<<< Updated upstream
     // SQLite.openDatabase({
     //     name: "TestDatabase",
     //     createFromLocation: "~testMySelf.db",
     // }).then((db) => {
     //     console.log("Database open!");
     // });
+=======
+  async componentDidMount() {
+    // await AsyncStorage.removeItem('maxPage')
+    // await AsyncStorage.removeItem('wallet')
+    // console.log('wallet',await AsyncStorage.getItem(`wallet`))
+    // await SpenseRepository.deleteAll();
+    // console.log('spense',await SpenseRepository.getAll())
+    // console.log('day',await SpenseRepository.getAllDay())
+    await seed(true);
+>>>>>>> Stashed changes
   }
 
   render() {
