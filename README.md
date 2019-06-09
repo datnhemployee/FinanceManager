@@ -15,7 +15,6 @@
 **Dependencies**
 | Dependency | Version | Link |
 |--------------|-------|-------|
-| axios | 0.18.0 ||
 | react-native-color-palette | 2.0.3 | [Document](https://www.npmjs.com/package/react-native-color-palette) |
 | react-native-image-picker | 0.28.1 | [Document](https://github.com/react-native-community/react-native-image-picker) |
 | react-native-local-mongodb | 2.2.9 | [Document](https://www.npmjs.com/package/react-native-local-mongodb) |
