@@ -96,7 +96,7 @@ export default class extends Component {
                 localStyle.spentMoney,
                 {color: total >= 0 ? Color.DarkGreen: Color.Red}]}>
                 {Typeface.toCase({
-                    text: total + ' 000',
+                    text: total + '',
                     type: Typeface.type.default,    
                 })}
             </Text>

@@ -268,7 +268,7 @@ export default class extends Component {
                 ]}>
                 {/* {params.changeTitle} */}
                 {Typeface.toCase({
-                    text: this.state.wallet + ' 000',
+                    text: this.state.wallet + '',
                     type: Typeface.type.default,    
                 })} 
             </Text>

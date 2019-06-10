@@ -10,8 +10,13 @@
     "axios": "^0.18.0",
     "react": "16.6.3",
     "react-native": "0.58.5",
-    "react-native-sqlite-storage": "^3.3.9",
-    "react-native-vector-icons": "^6.3.0"
+    "react-native-color-palette": "2.0.3",
+    "react-native-gesture-handler": "1.1.0",
+    "react-native-local-mongodb": "2.2.9",
+    "react-native-segmented-control-tab": "3.4.0",
+    "react-native-svg": "9.4.0",
+    "react-native-svg-charts": "5.2.0",
+    "react-native-vector-icons": "6.3.0"
   },
   "devDependencies": {
     "babel-core": "7.0.0-bridge.0",
